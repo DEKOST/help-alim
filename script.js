@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
         checkScore();
         checkAchievements();
         playClickSound();
+        showScoreIncrement();
     });
 
     gameImage.addEventListener('click', function() {
@@ -40,6 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
         checkScore();
         checkAchievements();
         playClickSound();
+        showScoreIncrement();
     });
 
     secretButton.addEventListener('click', function() {
@@ -153,6 +155,32 @@ document.addEventListener('DOMContentLoaded', function() {
         clickSound.pause();
         clickSound.currentTime = 0;
         clickSound.play();
+    }
+
+    function showScoreIncrement() {
+        const scoreIncrement = document.createElement('span');
+        scoreIncrement.textContent = `+1💵`;
+        scoreIncrement.style.marginLeft = '10px';
+        scoreIncrement.style.position = 'absolute';
+        scoreIncrement.style.fontSize = '20px';
+        scoreIncrement.style.color = 'green';
+        scoreIncrement.style.transition = 'opacity 0.5s, transform 0.5s';
+        scoreIncrement.style.opacity = '0';
+        scoreIncrement.style.transform = 'translateY(-20px)';
+        scoreDisplay.appendChild(scoreIncrement);
+
+        setTimeout(() => {
+            scoreIncrement.style.opacity = '1';
+            scoreIncrement.style.transform = 'translateY(0)';
+        }, 10);
+
+        setTimeout(() => {
+            scoreIncrement.style.opacity = '0';
+            scoreIncrement.style.transform = 'translateY(-20px)';
+            setTimeout(() => {
+                scoreDisplay.removeChild(scoreIncrement);
+            }, 500);
+        }, 1000);
     }
 
     // Загрузить уже разблокированные ачивки
