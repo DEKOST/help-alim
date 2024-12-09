@@ -9,17 +9,55 @@
 <body>
     <div class="container">
         <h1>Помоги Алиму с деньгами на жизнь!</h1>
+        <button id="achievementsButton" style="background-color: cornflowerblue;">🎖 Ачивки 🎖</button>
+        <button id="resetButton" style="background-color: slategray;">Обнулить прогресс</button>
         <img id="gameImage" src="1.png" alt="Game Image" style="display: block; margin: 20px auto;">
         <p id="score">$0</p>
-        <button id="clickButton">Бабло!</button>
+        <button id="clickButton">💰 Бабло 💰</button>
         <button id="secretButton">Секретная функция</button>
         <p id="hint" style="display: none;">Для активации новой функции тебе нужно набрать $100</p>
-        <p id="notification" style="display: none; color: red;">Вы больше не можете воспользоваться этой функцией. Вас изгнали! Иди на хуй!</p>
         <div class="footer">
             <img id="gameImage" src="cosmo.png" alt="Game Image" style="display: block; width: 15%;">
             <a href="https://teletype.in/@sunspace_spc/links">SunSpace Empire</a>
         </div>
+        <audio id="clickSound" src="mario_coin_sound.mp3"></audio>
+        <audio id="achievementSound" src="yamete_kudasai.mp3"></audio>
     </div>
-        <script src="script.js"></script>
+
+    <!-- Modal for achievements -->
+    <div id="achievementsModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Ачивки</h2>
+            <ul id="achievementList"></ul>
+        </div>
+    </div>
+
+    <!-- Modal for new achievement notification -->
+    <div id="achievementNotificationModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="achievementNotificationText"></h2>
+            <img id="achievementImage" src="" alt="Achievement Image" style="display: none; width: 100%; margin-top: 20px;">
+        </div>
+    </div>
+
+    <!-- Modal for hint notification -->
+    <div id="hintNotificationModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="hintNotificationText"></h2>
+        </div>
+    </div>
+
+    <!-- Modal for notification -->
+    <div id="notificationModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="notificationText"></h2>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
