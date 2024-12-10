@@ -1,12 +1,15 @@
 document.addEventListener('DOMContentLoaded', function() {
     const clickButton = document.getElementById('clickButton');
-    const secretButton = document.getElementById('secretButton');
+    const upgradeButton = document.getElementById('upgradeButton');
+    const upgradeClickButton = document.getElementById('upgradeClickButton');
+    const rugPullButton = document.getElementById('rugPullButton');
     const scoreDisplay = document.getElementById('score');
     const hint = document.getElementById('hint');
     const notification = document.getElementById('notification');
     const gameImage = document.getElementById('gameImage');
     const achievementsButton = document.getElementById('achievementsButton');
     const resetButton = document.getElementById('resetButton');
+    const addToHomeScreenButton = document.getElementById('addToHomeScreenButton');
     const achievementsModal = document.getElementById('achievementsModal');
     const achievementList = document.getElementById('achievementList');
     const achievementNotificationModal = document.getElementById('achievementNotificationModal');
@@ -16,17 +19,32 @@ document.addEventListener('DOMContentLoaded', function() {
     const hintNotificationText = document.getElementById('hintNotificationText');
     const notificationModal = document.getElementById('notificationModal');
     const notificationText = document.getElementById('notificationText');
+    const upgradeModal = document.getElementById('upgradeModal');
     const clickSound = document.getElementById('clickSound');
     const achievementSound = document.getElementById('achievementSound');
     let score = localStorage.getItem('score') ? parseInt(localStorage.getItem('score')) : 0;
     let add20000ButtonClicked = localStorage.getItem('add20000ButtonClicked') === 'true';
     let achievementsUnlocked = JSON.parse(localStorage.getItem('achievementsUnlocked')) || [];
+    let clickUpgradeLevel = localStorage.getItem('clickUpgradeLevel') ? parseInt(localStorage.getItem('clickUpgradeLevel')) : 0;
+    let clickUpgradeCost = 100; // Начальная стоимость прокачки клика
 
     scoreDisplay.textContent = `$${score}`;
 
-    clickButton.addEventListener('click', function() {
-        score++;
+    function updateScoreDisplay() {
         scoreDisplay.textContent = `$${score}`;
+    }
+
+    function updateUpgradeButton() {
+        upgradeClickButton.textContent = `Upgrade Click ($${clickUpgradeCost})`;
+    }
+
+    function closeUpgradeModal() {
+        upgradeModal.style.display = 'none';
+    }
+
+    clickButton.addEventListener('click', function() {
+        score += 1 + clickUpgradeLevel; // Увеличиваем score в зависимости от уровня прокачки
+        updateScoreDisplay();
         localStorage.setItem('score', score);
         checkScore();
         checkAchievements();
@@ -35,19 +53,13 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     gameImage.addEventListener('click', function() {
-        score++;
-        scoreDisplay.textContent = `$${score}`;
+        score += 1 + clickUpgradeLevel; // Увеличиваем score в зависимости от уровня прокачки
+        updateScoreDisplay();
         localStorage.setItem('score', score);
         checkScore();
         checkAchievements();
         playClickSound();
         showScoreIncrement();
-    });
-
-    secretButton.addEventListener('click', function() {
-        if (score < 100) {
-            showHintNotification('Для активации новой функции тебе нужно заработать $100');
-        }
     });
 
     achievementsButton.addEventListener('click', function() {
@@ -59,33 +71,53 @@ document.addEventListener('DOMContentLoaded', function() {
         location.reload();
     });
 
+    addToHomeScreenButton.addEventListener('click', function() {
+        if (window.Telegram.WebApp.initDataUnsafe) {
+            const tg = window.Telegram.WebApp;
+            tg.addToHomeScreen();
+        }
+    });
+
+    upgradeButton.addEventListener('click', function() {
+        upgradeModal.style.display = 'block';
+    });
+
+    upgradeClickButton.addEventListener('click', function() {
+        upgradeClick();
+        closeUpgradeModal();
+    });
+
+    rugPullButton.addEventListener('click', function() {
+        if (!add20000ButtonClicked) {
+            score += 20000;
+            updateScoreDisplay();
+            localStorage.setItem('score', score);
+            add20000ButtonClicked = true;
+            localStorage.setItem('add20000ButtonClicked', 'true');
+            gameImage.src = '2.png'; // Изменить изображение на 2.png
+            addAchievement('rug_pull', '🐔 Петушара. Сделать RUG PULL!');
+            showAchievementNotification('🐔 Петушара. Сделать RUG PULL!', 'rug_pull_image.webp');
+            achievementSound.play();
+            closeUpgradeModal();
+        } else {
+            closeUpgradeModal();
+            showNotification('Ты больше не можешь воспользоваться этой функцией. Тебя изгнали! Иди на хуй! 🖕🖕🖕');
+        }
+    });
+
     function checkScore() {
         if (score >= 100) {
-            secretButton.textContent = '📉 !!! RUG PULL !!! 📉';
-            secretButton.style.backgroundColor = 'red';
-            secretButton.removeEventListener('click', secretButton.click);
-            secretButton.addEventListener('click', function() {
-                if (!add20000ButtonClicked) {
-                    score += 20000;
-                    scoreDisplay.textContent = `$${score}`;
-                    localStorage.setItem('score', score);
-                    add20000ButtonClicked = true;
-                    localStorage.setItem('add20000ButtonClicked', 'true');
-                    gameImage.src = '2.png'; // Изменить изображение на 2.png
-                    addAchievement('rug_pull', '🐔 Петушара. Сделать RUG PULL!');
-                    showAchievementNotification('Разблокирована ачивка: 🐔 Петушара. Сделать RUG PULL!', 'rug_pull_image.webp');
-                    achievementSound.play();
-                } else {
-                    showNotification('Ты больше не можешь воспользоваться этой функцией. Тебя изгнали! Иди на хуй! 🖕🖕🖕');
-                }
-            });
-            hint.style.display = 'none';
+            rugPullButton.style.display = 'block';
+            if (hint) {
+                hint.style.display = 'none';
+            }
         }
 
         if (score >= 20000) {
             gameImage.src = '2.png'; // Изменить изображение на 2.png
         }
     }
+
 
     function checkAchievements() {
         if (score >= 10 && !achievementsUnlocked.includes('10')) {
@@ -115,7 +147,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         if (score >= 20200 && !achievementsUnlocked.includes('20200')) {
             addAchievement('20200', 'Дурачек');
-            showAchievementNotification('Разблокирована ачивка: "Дурачек". Хватит тыкать, пиздуй на завод!');
+            showAchievementNotification('Разблокирована ачивка: "Дурачек". Хватит тыкать, пиздюй на завод!');
             achievementSound.play();
         }
     }
@@ -159,7 +191,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function showScoreIncrement() {
         const scoreIncrement = document.createElement('span');
-        scoreIncrement.textContent = `+1💵`;
+        scoreIncrement.textContent = `+${1 + clickUpgradeLevel}💵`;
         scoreIncrement.style.marginLeft = '10px';
         scoreIncrement.style.position = 'absolute';
         scoreIncrement.style.fontSize = '20px';
@@ -178,7 +210,9 @@ document.addEventListener('DOMContentLoaded', function() {
             scoreIncrement.style.opacity = '0';
             scoreIncrement.style.transform = 'translateY(-20px)';
             setTimeout(() => {
-                scoreDisplay.removeChild(scoreIncrement);
+                if (scoreDisplay.contains(scoreIncrement)) {
+                    scoreDisplay.removeChild(scoreIncrement);
+                }
             }, 500);
         }, 1000);
     }
@@ -206,25 +240,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // Проверка счета при загрузке страницы
     function checkScoreOnLoad() {
         if (score >= 100) {
-            secretButton.textContent = '📉 !!! RUG PULL !!! 📉';
-            secretButton.style.backgroundColor = 'red';
-            secretButton.removeEventListener('click', secretButton.click);
-            secretButton.addEventListener('click', function() {
-                if (!add20000ButtonClicked) {
-                    score += 20000;
-                    scoreDisplay.textContent = `$${score}`;
-                    localStorage.setItem('score', score);
-                    add20000ButtonClicked = true;
-                    localStorage.setItem('add20000ButtonClicked', 'true');
-                    gameImage.src = '2.png'; // Изменить изображение на 2.png
-                    addAchievement('rug_pull', '🐔 Петушара. Сделать RUG PULL!');
-                    showAchievementNotification('🐔 Петушара. Сделать RUG PULL!', 'rug_pull_image.webp');
-                    achievementSound.play();
-                } else {
-                    showNotification('Ты больше не можешь воспользоваться этой функцией. Тебя изгнали! Иди на хуй! 🖕🖕🖕');
-                }
-            });
-            hint.style.display = 'none';
+            rugPullButton.style.display = 'block';
+            if (hint) {
+                hint.style.display = 'none';
+            }
         }
 
         if (score >= 20000) {
@@ -232,8 +251,26 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    // Функция для прокачки клика
+    function upgradeClick() {
+        if (score >= clickUpgradeCost) {
+            score -= clickUpgradeCost;
+            clickUpgradeLevel++;
+            clickUpgradeCost = Math.round(clickUpgradeCost * 1.25); // Увеличиваем стоимость прокачки на 1.25
+            updateScoreDisplay();
+            updateUpgradeButton();
+            localStorage.setItem('score', score);
+            localStorage.setItem('clickUpgradeLevel', clickUpgradeLevel);
+            localStorage.setItem('clickUpgradeCost', clickUpgradeCost);
+            showNotification(`Клик прокачан до уровня ${clickUpgradeLevel}!`);
+        } else {
+            showNotification('Недостаточно денег для прокачки клика!');
+        }
+    }
+
     loadAchievements();
     checkScoreOnLoad();
+    updateUpgradeButton();
 
     // Close the modal when the user clicks on <span> (x)
     document.querySelectorAll('.close').forEach(closeButton => {
@@ -241,35 +278,4 @@ document.addEventListener('DOMContentLoaded', function() {
             this.parentElement.parentElement.style.display = 'none';
         });
     });
-
-    // Initialize Telegram WebApp
-    if (window.Telegram.WebApp.initDataUnsafe) {
-        const tg = window.Telegram.WebApp;
-        tg.expand();
-
-        // Add to Home Screen
-        const addToHomeScreenButton = document.createElement('button');
-        addToHomeScreenButton.textContent = 'Добавить на главный экран';
-        addToHomeScreenButton.style.backgroundColor = 'green';
-        addToHomeScreenButton.style.color = 'white';
-        addToHomeScreenButton.style.padding = '10px';
-        addToHomeScreenButton.style.border = 'none';
-        addToHomeScreenButton.style.borderRadius = '5px';
-        addToHomeScreenButton.style.cursor = 'pointer';
-        addToHomeScreenButton.style.marginTop = '10px';
-        document.querySelector('.container').appendChild(addToHomeScreenButton);
-
-        addToHomeScreenButton.addEventListener('click', function() {
-            tg.addToHomeScreen();
-        });
-
-        // Check Home Screen Status
-        tg.checkHomeScreenStatus(function(status) {
-            if (status) {
-                console.log('App is on the home screen');
-            } else {
-                console.log('App is not on the home screen');
-            }
-        });
-    }
 });
