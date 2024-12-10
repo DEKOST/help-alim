@@ -259,7 +259,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Initialize Telegram WebApp
-    /*if (window.Telegram.WebApp.initDataUnsafe) {
+    if (window.Telegram.WebApp.initDataUnsafe) {
         const tg = window.Telegram.WebApp;
         tg.expand();
 
@@ -284,5 +284,30 @@ document.addEventListener('DOMContentLoaded', function() {
             playClickSound();
             showScoreIncrement();
         });
-    }*/
+
+        // Add to Home Screen
+        const addToHomeScreenButton = document.createElement('button');
+        addToHomeScreenButton.textContent = 'Добавить на главный экран';
+        addToHomeScreenButton.style.backgroundColor = 'green';
+        addToHomeScreenButton.style.color = 'white';
+        addToHomeScreenButton.style.padding = '10px';
+        addToHomeScreenButton.style.border = 'none';
+        addToHomeScreenButton.style.borderRadius = '5px';
+        addToHomeScreenButton.style.cursor = 'pointer';
+        addToHomeScreenButton.style.marginTop = '10px';
+        document.querySelector('.container').appendChild(addToHomeScreenButton);
+
+        addToHomeScreenButton.addEventListener('click', function() {
+            tg.addToHomeScreen();
+        });
+
+        // Check Home Screen Status
+        tg.checkHomeScreenStatus(function(status) {
+            if (status) {
+                console.log('App is on the home screen');
+            } else {
+                console.log('App is not on the home screen');
+            }
+        });
+    }
 });
