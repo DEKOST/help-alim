@@ -259,7 +259,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Initialize Telegram WebApp
-    if (window.Telegram.WebApp.initDataUnsafe) {
+    /*if (window.Telegram.WebApp.initDataUnsafe) {
         const tg = window.Telegram.WebApp;
         tg.expand();
 
@@ -284,5 +284,5 @@ document.addEventListener('DOMContentLoaded', function() {
             playClickSound();
             showScoreIncrement();
         });
-    }
+    }*/
 });
