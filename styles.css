@@ -27,11 +27,13 @@ body {
 
 .container {
     text-align: center;
-    background-color: #d4ffd6;
+    //background-color: #d4ffd6;
+    background: linear-gradient(#c5bfff, #a6fffe);
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 90%;
+    height: 95%;
     max-width: 400px;
 }
 
@@ -147,7 +149,7 @@ button:disabled {
 
 .description {
     font-family: "GreenHillSans-Regular", sans-serif;
-    font-size: 0.4em;
+    font-size: 0.4rem;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
