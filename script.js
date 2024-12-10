@@ -263,28 +263,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        tg.MainButton.text = "Помоги Алиму!";
-        tg.MainButton.show();
-        tg.MainButton.onClick(function() {
-            score += 100;
-            scoreDisplay.textContent = `$${score}`;
-            localStorage.setItem('score', score);
-            checkScore();
-            checkAchievements();
-            playClickSound();
-            showScoreIncrement();
-        });
-
-        tg.onEvent('mainButtonClicked', function() {
-            score += 100;
-            scoreDisplay.textContent = `$${score}`;
-            localStorage.setItem('score', score);
-            checkScore();
-            checkAchievements();
-            playClickSound();
-            showScoreIncrement();
-        });
-
         // Add to Home Screen
         const addToHomeScreenButton = document.createElement('button');
         addToHomeScreenButton.textContent = 'Добавить на главный экран';
