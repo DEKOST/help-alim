@@ -257,4 +257,32 @@ document.addEventListener('DOMContentLoaded', function() {
             notificationModal.style.display = 'none';
         }
     });
+
+    // Initialize Telegram WebApp
+    if (window.Telegram.WebApp.initDataUnsafe) {
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+
+        tg.MainButton.text = "Помоги Алиму!";
+        tg.MainButton.show();
+        tg.MainButton.onClick(function() {
+            score += 100;
+            scoreDisplay.textContent = `$${score}`;
+            localStorage.setItem('score', score);
+            checkScore();
+            checkAchievements();
+            playClickSound();
+            showScoreIncrement();
+        });
+
+        tg.onEvent('mainButtonClicked', function() {
+            score += 100;
+            scoreDisplay.textContent = `$${score}`;
+            localStorage.setItem('score', score);
+            checkScore();
+            checkAchievements();
+            playClickSound();
+            showScoreIncrement();
+        });
+    }
 });
