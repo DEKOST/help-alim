@@ -242,22 +242,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Close the modal when the user clicks anywhere outside of the modal
-    window.addEventListener('click', function(event) {
-        if (event.target === achievementsModal) {
-            achievementsModal.style.display = 'none';
-        }
-        if (event.target === achievementNotificationModal) {
-            achievementNotificationModal.style.display = 'none';
-        }
-        if (event.target === hintNotificationModal) {
-            hintNotificationModal.style.display = 'none';
-        }
-        if (event.target === notificationModal) {
-            notificationModal.style.display = 'none';
-        }
-    });
-
     // Initialize Telegram WebApp
     if (window.Telegram.WebApp.initDataUnsafe) {
         const tg = window.Telegram.WebApp;
