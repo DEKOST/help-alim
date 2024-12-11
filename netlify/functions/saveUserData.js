@@ -3,7 +3,17 @@ const axios = require('axios');
 const BIN_ID = process.env.BIN_ID; // Замените на ваш Bin ID
 const SECRET_KEY = process.env.SECRET_KEY; // Замените на ваш Secret Key
 
-// Функция для записи данных
+// Функция для чтения данных из JSONBin.io
+async function readDatabase() {
+    const response = await axios.get(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+        headers: {
+            'X-Master-Key': SECRET_KEY
+        }
+    });
+    return response.data.record;
+}
+
+// Функция для записи данных в JSONBin.io
 async function writeDatabase(data) {
     await axios.put(`https://api.jsonbin.io/v3/b/${BIN_ID}`, data, {
         headers: {
@@ -16,20 +26,20 @@ async function writeDatabase(data) {
 exports.handler = async function(event, context) {
     try {
         const database = await readDatabase();
-        const { userId, username } = JSON.parse(event.body);
+        const { userId, data } = JSON.parse(event.body);
 
         // Проверка, существует ли пользователь
         let user = database.users.find(u => u.userId === userId);
         if (!user) {
             // Если пользователь не существует, добавляем его
-            user = { userId, username };
+            user = { userId, data };
             database.users.push(user);
         } else {
             // Если пользователь существует, обновляем его данные
-            user.username = username;
+            user.data = data;
         }
 
-        // Записываем обновленные данные
+        // Записываем обновленные данные в JSONBin.io
         await writeDatabase(database);
 
         return {
