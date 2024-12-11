@@ -1,11 +1,11 @@
 const { MongoClient } = require('mongodb');
 
-const uri = 'MONGODB_URI=mongodb+srv://app_user:Zfd-HtA-3r8-P7N@cluster0.rsdbr.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
+const uri = process.env.MONGODB_URI;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 exports.handler = async function(event, context) {
     await client.connect();
-    const database = client.db('your_database_name');
+    const database = client.db('Cluster0');
     const collection = database.collection('users');
 
     const { userId, username } = JSON.parse(event.body);
