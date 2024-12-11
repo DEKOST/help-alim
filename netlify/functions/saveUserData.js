@@ -1,9 +1,9 @@
 const axios = require('axios');
 
-const BIN_ID = '675979d4ad19ca34f8d950c0'; // Замените на ваш Bin ID
-const SECRET_KEY = '$2a$10$7CDyBggdX0Pwc1d0mUfUqOwBJ4gkvrcCC/XmQsgarWGmbtZxA5W4K'; // Замените на ваш Secret Key
+const BIN_ID = process.env.BIN_ID; // Замените на ваш Bin ID
+const SECRET_KEY = process.env.SECRET_KEY; // Замените на ваш Secret Key
 
-// Функция для чтения данных из JSONBin.io
+// Функция для чтения данных
 async function readDatabase() {
     const response = await axios.get(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
         headers: {
@@ -13,7 +13,27 @@ async function readDatabase() {
     return response.data.record;
 }
 
-// Функция для записи данных в JSONBin.io
+exports.handler = async function(event, context) {
+    try {
+        const database = await readDatabase();
+        const { userId } = JSON.parse(event.body);
+
+        // Проверка, существует ли пользователь
+        const user = database.users.find(u => u.userId === userId);
+
+        return {
+            statusCode: 200,
+            body: JSON.stringify({ user })
+        };
+    } catch (error) {
+        return {
+            statusCode: 500,
+            body: JSON.stringify({ errorType: error.name, errorMessage: error.message, trace: error.stack.split('\n') })
+        };
+    }
+};
+
+// Функция для записи данных
 async function writeDatabase(data) {
     await axios.put(`https://api.jsonbin.io/v3/b/${BIN_ID}`, data, {
         headers: {
@@ -39,7 +59,7 @@ exports.handler = async function(event, context) {
             user.username = username;
         }
 
-        // Записываем обновленные данные в JSONBin.io
+        // Записываем обновленные данные
         await writeDatabase(database);
 
         return {

@@ -8,45 +8,68 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('User ID:', userId);
     console.log('Username:', username);
 
-    // Отправка данных на сервер
-    fetch('/.netlify/functions/saveUserData', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ userId, username })
-    });
-    
-    const clickButton = document.getElementById('clickButton');
-    const upgradeButton = document.getElementById('upgradeButton');
-    const upgradeClickButton = document.getElementById('upgradeClickButton');
-    const rugPullButton = document.getElementById('rugPullButton');
-    const scoreDisplay = document.getElementById('score');
-    const hint = document.getElementById('hint');
-    const notification = document.getElementById('notification');
-    const gameImage = document.getElementById('gameImage');
-    const achievementsButton = document.getElementById('achievementsButton');
-    const resetButton = document.getElementById('resetButton');
-    const addToHomeScreenButton = document.getElementById('addToHomeScreenButton');
-    const achievementsModal = document.getElementById('achievementsModal');
-    const achievementList = document.getElementById('achievementList');
-    const achievementNotificationModal = document.getElementById('achievementNotificationModal');
-    const achievementNotificationText = document.getElementById('achievementNotificationText');
-    const achievementImage = document.getElementById('achievementImage');
-    const hintNotificationModal = document.getElementById('hintNotificationModal');
-    const hintNotificationText = document.getElementById('hintNotificationText');
-    const notificationModal = document.getElementById('notificationModal');
-    const notificationText = document.getElementById('notificationText');
-    const upgradeModal = document.getElementById('upgradeModal');
-    const clickSound = document.getElementById('clickSound');
-    const achievementSound = document.getElementById('achievementSound');
-    let score = localStorage.getItem('score') ? parseInt(localStorage.getItem('score')) : 0;
-    let add20000ButtonClicked = localStorage.getItem('add20000ButtonClicked') === 'true';
-    let achievementsUnlocked = JSON.parse(localStorage.getItem('achievementsUnlocked')) || [];
-    let clickUpgradeLevel = localStorage.getItem('clickUpgradeLevel') ? parseInt(localStorage.getItem('clickUpgradeLevel')) : 0;
-    let clickUpgradeCost = localStorage.getItem('clickUpgradeCost') ? parseInt(localStorage.getItem('clickUpgradeCost')) : 100;
+    // Функция для загрузки данных пользователя
+    async function loadUserData() {
+        const response = await fetch('/.netlify/functions/loadUserData', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ userId })
+        });
+        const data = await response.json();
+        return data.user ? data.user.data : null;
+    }
 
-    scoreDisplay.textContent = `$${score}`;
+    // Функция для сохранения данных пользователя
+    async function saveUserData(data) {
+        await fetch('/.netlify/functions/saveUserData', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ userId, data })
+        });
+    }
+
+    // Загрузка данных пользователя при запуске
+    loadUserData().then(userData => {
+        if (userData) {
+            score = userData.score || 0;
+            add20000ButtonClicked = userData.add20000ButtonClicked || false;
+            achievementsUnlocked = userData.achievementsUnlocked || [];
+            clickUpgradeLevel = userData.clickUpgradeLevel || 0;
+            clickUpgradeCost = userData.clickUpgradeCost || 100;
+        } else {
+            score = 0;
+            add20000ButtonClicked = false;
+            achievementsUnlocked = [];
+            clickUpgradeLevel = 0;
+            clickUpgradeCost = 100;
+        }
+
+        updateScoreDisplay();
+        updateUpgradeButton();
+    });
+
+    // Сохранение данных пользователя при изменении
+    function updateUserData() {
+        const userData = {
+            score,
+            add20000ButtonClicked,
+            achievementsUnlocked,
+            clickUpgradeLevel,
+            clickUpgradeCost
+        };
+        saveUserData(userData);
+    }
+
+    // Остальной ваш код
+    let score = 0;
+    let add20000ButtonClicked = false;
+    let achievementsUnlocked = [];
+    let clickUpgradeLevel = 0;
+    let clickUpgradeCost = 100;
 
     function updateScoreDisplay() {
         scoreDisplay.textContent = `$${score}`;
@@ -54,10 +77,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function updateUpgradeButton() {
         upgradeClickButton.textContent = `Upgrade Click ($${clickUpgradeCost})`;
-    }
-
-    function closeUpgradeModal() {
-        upgradeModal.style.display = 'none';
     }
 
     clickButton.addEventListener('click', function() {
@@ -68,6 +87,7 @@ document.addEventListener('DOMContentLoaded', function() {
         checkAchievements();
         playClickSound();
         showScoreIncrement();
+        updateUserData();
     });
 
     gameImage.addEventListener('click', function() {
@@ -78,6 +98,7 @@ document.addEventListener('DOMContentLoaded', function() {
         checkAchievements();
         playClickSound();
         showScoreIncrement();
+        updateUserData();
     });
 
     achievementsButton.addEventListener('click', function() {
@@ -103,6 +124,7 @@ document.addEventListener('DOMContentLoaded', function() {
     upgradeClickButton.addEventListener('click', function() {
         upgradeClick();
         closeUpgradeModal();
+        updateUserData();
     });
 
     rugPullButton.addEventListener('click', function() {
@@ -117,6 +139,7 @@ document.addEventListener('DOMContentLoaded', function() {
             showAchievementNotification('🐔 Петушара. Сделать RUG PULL!', 'rug_pull_image.webp');
             achievementSound.play();
             closeUpgradeModal();
+            updateUserData();
         } else {
             closeUpgradeModal();
             showNotification('Ты больше не можешь воспользоваться этой функцией. Тебя изгнали! Иди на хуй! 🖕🖕🖕');
@@ -135,7 +158,6 @@ document.addEventListener('DOMContentLoaded', function() {
             gameImage.src = '2.png'; // Изменить изображение на 2.png
         }
     }
-
 
     function checkAchievements() {
         if (score >= 10 && !achievementsUnlocked.includes('10')) {
@@ -177,6 +199,7 @@ document.addEventListener('DOMContentLoaded', function() {
             achievementList.appendChild(achievementItem);
             achievementsUnlocked.push(key);
             localStorage.setItem('achievementsUnlocked', JSON.stringify(achievementsUnlocked));
+            updateUserData();
         }
     }
 
@@ -281,6 +304,7 @@ document.addEventListener('DOMContentLoaded', function() {
             localStorage.setItem('clickUpgradeLevel', clickUpgradeLevel);
             localStorage.setItem('clickUpgradeCost', clickUpgradeCost);
             showNotification(`Клик прокачан до уровня ${clickUpgradeLevel}!`);
+            updateUserData();
         } else {
             showNotification('Недостаточно денег для прокачки клика!');
         }
