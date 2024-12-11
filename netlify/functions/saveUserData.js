@@ -1,22 +1,31 @@
-const fs = require('fs');
-const path = require('path');
+const axios = require('axios');
 
-const databasePath = path.join(__dirname, '/database.json');
+const BIN_ID = '675979d4ad19ca34f8d950c0'; // Замените на ваш Bin ID
+const SECRET_KEY = '$2a$10$7CDyBggdX0Pwc1d0mUfUqOwBJ4gkvrcCC/XmQsgarWGmbtZxA5W4K'; // Замените на ваш Secret Key
 
-// Функция для чтения данных из JSON-файла
-function readDatabase() {
-    const data = fs.readFileSync(databasePath, 'utf8');
-    return JSON.parse(data);
+// Функция для чтения данных из JSONBin.io
+async function readDatabase() {
+    const response = await axios.get(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+        headers: {
+            'X-Master-Key': SECRET_KEY
+        }
+    });
+    return response.data.record;
 }
 
-// Функция для записи данных в JSON-файл
-function writeDatabase(data) {
-    fs.writeFileSync(databasePath, JSON.stringify(data, null, 2), 'utf8');
+// Функция для записи данных в JSONBin.io
+async function writeDatabase(data) {
+    await axios.put(`https://api.jsonbin.io/v3/b/${BIN_ID}`, data, {
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Master-Key': SECRET_KEY
+        }
+    });
 }
 
 exports.handler = async function(event, context) {
     try {
-        const database = readDatabase();
+        const database = await readDatabase();
         const { userId, username } = JSON.parse(event.body);
 
         // Проверка, существует ли пользователь
@@ -30,8 +39,8 @@ exports.handler = async function(event, context) {
             user.username = username;
         }
 
-        // Записываем обновленные данные в JSON-файл
-        writeDatabase(database);
+        // Записываем обновленные данные в JSONBin.io
+        await writeDatabase(database);
 
         return {
             statusCode: 200,
