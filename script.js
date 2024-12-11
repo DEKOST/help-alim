@@ -65,6 +65,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         updateScoreDisplay();
         updateUpgradeButton();
+        loadAchievements();
     });
 
     // Сохранение данных пользователя при изменении
