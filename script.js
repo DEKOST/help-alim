@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const data = await response.json();
             return data.user ? data.user.data : null;
         } catch (error) {
-            console.log('Error loading user data:', error);
+            console.error('Error loading user data:', error);
             return null;
         }
     }
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 throw new Error('Network response was not ok');
             }
         } catch (error) {
-            console.log('Error saving user data:', error);
+            console.error('Error saving user data:', error);
         }
     }
 
@@ -65,6 +65,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         updateScoreDisplay();
         updateUpgradeButton();
+        loadAchievements(); // Загрузка ачивок после загрузки данных пользователя
     });
 
     // Сохранение данных пользователя при изменении
