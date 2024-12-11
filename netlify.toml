@@ -5,3 +5,9 @@ functions = "netlify/functions"
 [dev]
 command = "npm run dev"
 port = 8888
+
+[[
+functions
+]]
+name = "saveUserData"
+timeout = 30
