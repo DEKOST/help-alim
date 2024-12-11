@@ -24,8 +24,26 @@ document.addEventListener('DOMContentLoaded', function() {
             const data = await response.json();
             return data.user ? data.user.data : null;
         } catch (error) {
-            console.error('Error loading user data:', error);
+            console.log('Error loading user data:', error);
             return null;
+        }
+    }
+
+    // Функция для сохранения данных пользователя
+    async function saveUserData(data) {
+        try {
+            const response = await fetch('/.netlify/functions/saveUserData', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ userId, data })
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+        } catch (error) {
+            console.log('Error saving user data:', error);
         }
     }
 
@@ -47,10 +65,27 @@ document.addEventListener('DOMContentLoaded', function() {
 
         updateScoreDisplay();
         updateUpgradeButton();
-        loadAchievements(); // Загрузка ачивок после загрузки данных пользователя
     });
 
+    // Сохранение данных пользователя при изменении
+    function updateUserData() {
+        const userData = {
+            score,
+            add20000ButtonClicked,
+            achievementsUnlocked,
+            clickUpgradeLevel,
+            clickUpgradeCost
+        };
+        saveUserData(userData);
+    }
+
     // Остальной ваш код
+    let score = 0;
+    let add20000ButtonClicked = false;
+    let achievementsUnlocked = [];
+    let clickUpgradeLevel = 0;
+    let clickUpgradeCost = 100;
+
     const scoreDisplay = document.getElementById('score');
     const clickButton = document.getElementById('clickButton');
     const gameImage = document.getElementById('gameImage');
