@@ -29,24 +29,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Функция для сохранения данных пользователя
-    async function saveUserData(data) {
-        try {
-            const response = await fetch('/.netlify/functions/saveUserData', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ userId, data })
-            });
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-        } catch (error) {
-            console.error('Error saving user data:', error);
-        }
-    }
-
     // Загрузка данных пользователя при запуске
     loadUserData().then(userData => {
         if (userData) {
@@ -68,25 +50,7 @@ document.addEventListener('DOMContentLoaded', function() {
         loadAchievements(); // Загрузка ачивок после загрузки данных пользователя
     });
 
-    // Сохранение данных пользователя при изменении
-    function updateUserData() {
-        const userData = {
-            score,
-            add20000ButtonClicked,
-            achievementsUnlocked,
-            clickUpgradeLevel,
-            clickUpgradeCost
-        };
-        saveUserData(userData);
-    }
-
     // Остальной ваш код
-    let score = 0;
-    let add20000ButtonClicked = false;
-    let achievementsUnlocked = [];
-    let clickUpgradeLevel = 0;
-    let clickUpgradeCost = 100;
-
     const scoreDisplay = document.getElementById('score');
     const clickButton = document.getElementById('clickButton');
     const gameImage = document.getElementById('gameImage');
