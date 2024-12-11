@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
         upgradeModal.style.display = 'none';
     }
 
-    function handleClick() {
+    clickButton.addEventListener('click', function() {
         score += 1 + clickUpgradeLevel; // Увеличиваем score в зависимости от уровня прокачки
         updateScoreDisplay();
         localStorage.setItem('score', score);
@@ -50,15 +50,16 @@ document.addEventListener('DOMContentLoaded', function() {
         checkAchievements();
         playClickSound();
         showScoreIncrement();
-    }
+    });
 
-    clickButton.addEventListener('click', handleClick);
-
-    gameImage.addEventListener('click', handleClick);
-
-    gameImage.addEventListener('touchstart', function(event) {
-        event.preventDefault();
-        handleClick();
+    gameImage.addEventListener('click', function() {
+        score += 1 + clickUpgradeLevel; // Увеличиваем score в зависимости от уровня прокачки
+        updateScoreDisplay();
+        localStorage.setItem('score', score);
+        checkScore();
+        checkAchievements();
+        playClickSound();
+        showScoreIncrement();
     });
 
     achievementsButton.addEventListener('click', function() {
@@ -117,30 +118,31 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+
     function checkAchievements() {
         if (score >= 10 && !achievementsUnlocked.includes('10')) {
-            addAchievement('10', 'Бомж. Заработать \$10');
-            showAchievementNotification('Разблокирована ачивка: Бомж. Заработать \$10');
+            addAchievement('10', 'Бомж. Заработать $10');
+            showAchievementNotification('Разблокирована ачивка: Бомж. Заработать $10');
             achievementSound.play();
         }
         if (score >= 15 && !achievementsUnlocked.includes('15')) {
-            addAchievement('15', 'Нищий. Заработать \$15');
-            showAchievementNotification('Разблокирована ачивка: Нищий. Заработать \$15');
+            addAchievement('15', 'Нищий. Заработать $15');
+            showAchievementNotification('Разблокирована ачивка: Нищий. Заработать $15');
             achievementSound.play();
         }
         if (score >= 20 && !achievementsUnlocked.includes('20')) {
-            addAchievement('20', 'Бедняк. Заработать \$20');
-            showAchievementNotification('Разблокирована ачивка: Бедняк. Заработать \$20');
+            addAchievement('20', 'Бедняк. Заработать $20');
+            showAchievementNotification('Разблокирована ачивка: Бедняк. Заработать $20');
             achievementSound.play();
         }
         if (score >= 50 && !achievementsUnlocked.includes('50')) {
-            addAchievement('50', 'Рабочий класс. Заработать \$50');
-            showAchievementNotification('Разблокирована ачивка: Рабочий класс. Заработать \$50');
+            addAchievement('50', 'Рабочий класс. Заработать $50');
+            showAchievementNotification('Разблокирована ачивка: Рабочий класс. Заработать $50');
             achievementSound.play();
         }
         if (score >= 100 && !achievementsUnlocked.includes('100')) {
-            addAchievement('100', 'Средний класс. Заработать \$100. Разблокирована функция - "Rug pull"!');
-            showAchievementNotification('Разблокирована ачивка: Средний класс. Заработать \$100. Разблокирована функция - "Rug pull"!');
+            addAchievement('100', 'Средний класс. Заработать $100. Разблокирована функция - "Rug pull"!');
+            showAchievementNotification('Разблокирована ачивка: Средний класс. Заработать $100. Разблокирована функция - "Rug pull"!');
             achievementSound.play();
         }
         if (score >= 20200 && !achievementsUnlocked.includes('20200')) {
@@ -218,11 +220,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // Загрузить уже разблокированные ачивки
     function loadAchievements() {
         const achievements = {
-            '10': 'Бомж. Заработать \$10',
-            '15': 'Нищий. Заработать \$15',
-            '20': 'Бедняк. Заработать \$20',
-            '50': 'Рабочий класс. Заработать \$50',
-            '100': 'Средний класс. Заработать \$100',
+            '10': 'Бомж. Заработать $10',
+            '15': 'Нищий. Заработать $15',
+            '20': 'Бедняк. Заработать $20',
+            '50': 'Рабочий класс. Заработать $50',
+            '100': 'Средний класс. Заработать $100',
             'rug_pull': '🐔 Петушара. Сделать RUG PULL!',
             '20200': 'Дурачек'
         };

@@ -1,6 +1,7 @@
 * {
   -webkit-tap-highlight-color: transparent;
 }
+
 @font-face {
     font-family: "GreenHillSans-Regular";
     src: url("./fonts/GreenHillSans-Regular.ttf") format("truetype");
