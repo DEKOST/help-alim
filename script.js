@@ -10,26 +10,41 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Функция для загрузки данных пользователя
     async function loadUserData() {
-        const response = await fetch('/.netlify/functions/loadUserData', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ userId })
-        });
-        const data = await response.json();
-        return data.user ? data.user.data : null;
+        try {
+            const response = await fetch('/.netlify/functions/loadUserData', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ userId })
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            return data.user ? data.user.data : null;
+        } catch (error) {
+            console.error('Error loading user data:', error);
+            return null;
+        }
     }
 
     // Функция для сохранения данных пользователя
     async function saveUserData(data) {
-        await fetch('/.netlify/functions/saveUserData', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ userId, data })
-        });
+        try {
+            const response = await fetch('/.netlify/functions/saveUserData', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ userId, data })
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+        } catch (error) {
+            console.error('Error saving user data:', error);
+        }
     }
 
     // Загрузка данных пользователя при запуске
@@ -71,6 +86,26 @@ document.addEventListener('DOMContentLoaded', function() {
     let clickUpgradeLevel = 0;
     let clickUpgradeCost = 100;
 
+    const scoreDisplay = document.getElementById('score');
+    const clickButton = document.getElementById('clickButton');
+    const gameImage = document.getElementById('gameImage');
+    const achievementsButton = document.getElementById('achievementsButton');
+    const resetButton = document.getElementById('resetButton');
+    const addToHomeScreenButton = document.getElementById('addToHomeScreenButton');
+    const upgradeButton = document.getElementById('upgradeButton');
+    const upgradeClickButton = document.getElementById('upgradeClickButton');
+    const rugPullButton = document.getElementById('rugPullButton');
+    const achievementList = document.getElementById('achievementList');
+    const achievementNotificationModal = document.getElementById('achievementNotificationModal');
+    const achievementNotificationText = document.getElementById('achievementNotificationText');
+    const achievementImage = document.getElementById('achievementImage');
+    const hintNotificationModal = document.getElementById('hintNotificationModal');
+    const hintNotificationText = document.getElementById('hintNotificationText');
+    const notificationModal = document.getElementById('notificationModal');
+    const notificationText = document.getElementById('notificationText');
+    const clickSound = document.getElementById('clickSound');
+    const achievementSound = document.getElementById('achievementSound');
+
     function updateScoreDisplay() {
         scoreDisplay.textContent = `$${score}`;
     }
@@ -82,7 +117,6 @@ document.addEventListener('DOMContentLoaded', function() {
     clickButton.addEventListener('click', function() {
         score += 1 + clickUpgradeLevel; // Увеличиваем score в зависимости от уровня прокачки
         updateScoreDisplay();
-        localStorage.setItem('score', score);
         checkScore();
         checkAchievements();
         playClickSound();
@@ -93,7 +127,6 @@ document.addEventListener('DOMContentLoaded', function() {
     gameImage.addEventListener('click', function() {
         score += 1 + clickUpgradeLevel; // Увеличиваем score в зависимости от уровня прокачки
         updateScoreDisplay();
-        localStorage.setItem('score', score);
         checkScore();
         checkAchievements();
         playClickSound();
@@ -131,9 +164,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!add20000ButtonClicked) {
             score += 20000;
             updateScoreDisplay();
-            localStorage.setItem('score', score);
             add20000ButtonClicked = true;
-            localStorage.setItem('add20000ButtonClicked', 'true');
             gameImage.src = '2.png'; // Изменить изображение на 2.png
             addAchievement('rug_pull', '🐔 Петушара. Сделать RUG PULL!');
             showAchievementNotification('🐔 Петушара. Сделать RUG PULL!', 'rug_pull_image.webp');
@@ -198,7 +229,6 @@ document.addEventListener('DOMContentLoaded', function() {
             achievementItem.textContent = text;
             achievementList.appendChild(achievementItem);
             achievementsUnlocked.push(key);
-            localStorage.setItem('achievementsUnlocked', JSON.stringify(achievementsUnlocked));
             updateUserData();
         }
     }
@@ -300,9 +330,6 @@ document.addEventListener('DOMContentLoaded', function() {
             clickUpgradeCost = Math.round(clickUpgradeCost * 1.25); // Увеличиваем стоимость прокачки на 1.25
             updateScoreDisplay();
             updateUpgradeButton();
-            localStorage.setItem('score', score);
-            localStorage.setItem('clickUpgradeLevel', clickUpgradeLevel);
-            localStorage.setItem('clickUpgradeCost', clickUpgradeCost);
             showNotification(`Клик прокачан до уровня ${clickUpgradeLevel}!`);
             updateUserData();
         } else {

@@ -3,7 +3,7 @@ const axios = require('axios');
 const BIN_ID = process.env.BIN_ID; // Замените на ваш Bin ID
 const SECRET_KEY = process.env.SECRET_KEY; // Замените на ваш Secret Key
 
-// Функция для чтения данных
+// Функция для чтения данных из JSONBin.io
 async function readDatabase() {
     const response = await axios.get(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
         headers: {
