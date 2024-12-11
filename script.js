@@ -1,4 +1,22 @@
 document.addEventListener('DOMContentLoaded', function() {
+    const tg = window.Telegram.WebApp;
+    tg.expand();
+
+    const userId = tg.initDataUnsafe.user.id;
+    const username = tg.initDataUnsafe.user.username;
+
+    console.log('User ID:', userId);
+    console.log('Username:', username);
+
+    // Отправка данных на сервер
+    fetch('/.netlify/functions/saveUserData', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ userId, username })
+    });
+    
     const clickButton = document.getElementById('clickButton');
     const upgradeButton = document.getElementById('upgradeButton');
     const upgradeClickButton = document.getElementById('upgradeClickButton');
@@ -26,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let add20000ButtonClicked = localStorage.getItem('add20000ButtonClicked') === 'true';
     let achievementsUnlocked = JSON.parse(localStorage.getItem('achievementsUnlocked')) || [];
     let clickUpgradeLevel = localStorage.getItem('clickUpgradeLevel') ? parseInt(localStorage.getItem('clickUpgradeLevel')) : 0;
-    let clickUpgradeCost = 100; // Начальная стоимость прокачки клика
+    let clickUpgradeCost = localStorage.getItem('clickUpgradeCost') ? parseInt(localStorage.getItem('clickUpgradeCost')) : 100;
 
     scoreDisplay.textContent = `$${score}`;
 
