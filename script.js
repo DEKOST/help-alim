@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('Username:', username);
 
     // Отправка данных на сервер
-    fetch('/.netlify/functions/saveUserData', {
+    fetch('/netlify/functions/saveUserData', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
