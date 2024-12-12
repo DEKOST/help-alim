@@ -1,13 +1,12 @@
 //resetUserData
 const { MongoClient } = require('mongodb');
 
-const uri = process.env.MONGODB_URI;
+const username = process.env.MONGODB_USER;
+const password = process.env.MONGODB_PASS;
+const ip = process.env.MONGODB_IP;
 const dbName = process.env.MONGODB_DBNAME;
-const mongoClient = new MongoClient(uri, {
-    serverSelectionTimeoutMS: 5000,
-    socketTimeoutMS: 45000,
-    connectTimeoutMS: 30000
-});
+const uri = `mongodb://${username}:${password}@${ip}`;
+const mongoClient = new MongoClient(uri);
 const clientPromise = mongoClient.connect();
 
 exports.handler = async function(event, context) {
