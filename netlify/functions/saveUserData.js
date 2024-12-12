@@ -1,4 +1,4 @@
-//saveUserDate
+//saveUserData
 const { MongoClient } = require('mongodb');
 
 const username = process.env.MONGODB_USER;

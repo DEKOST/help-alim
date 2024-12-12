@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let achievementsUnlocked = [];
     let clickUpgradeLevel = 0;
     let clickUpgradeCost = 100;
+    let clickCount = 0;
 
     // Функция для отправки всех данных на сервер
     function saveUserData() {
@@ -111,7 +112,11 @@ document.addEventListener('DOMContentLoaded', function() {
     clickButton.addEventListener('click', function() {
         score += 1 + clickUpgradeLevel; // Увеличиваем score в зависимости от уровня прокачки
         updateScoreDisplay();
-        saveUserData();
+        clickCount++;
+        if (clickCount >= 10) {
+            saveUserData();
+            clickCount = 0; // Сброс счетчика нажатий
+        }
         checkScore();
         checkAchievements();
         playClickSound();
@@ -121,7 +126,11 @@ document.addEventListener('DOMContentLoaded', function() {
     gameImage.addEventListener('click', function() {
         score += 1 + clickUpgradeLevel; // Увеличиваем score в зависимости от уровня прокачки
         updateScoreDisplay();
-        saveUserData();
+        clickCount++;
+        if (clickCount >= 10) {
+            saveUserData();
+            clickCount = 0; // Сброс счетчика нажатий
+        }
         checkScore();
         checkAchievements();
         playClickSound();
