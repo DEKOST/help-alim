@@ -24,9 +24,12 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             console.log('Server response:', data);
+            if (data.error) {
+                console.error('Server error:', data.error);
+            }
         })
         .catch(error => {
-            console.error('Error sending data to server:', error);
+            console.error('Network error:', error);
         });
     
     const clickButton = document.getElementById('clickButton');
