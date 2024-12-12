@@ -173,12 +173,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     rugPullButton.addEventListener('click', function() {
         if (!addRugPullClicked) {
-            score += 20000;
+            score += 100000; // Увеличиваем стоимость Rug Pull до 100000
             updateScoreDisplay();
             addRugPullClicked = true;
             gameImage.src = '2.png'; // Изменить изображение на 2.png
-            addAchievement('rug_pull', '🐔 Петушара. Сделать RUG PULL!');
-            showAchievementNotification('🐔 Петушара. Сделать RUG PULL!', 'rug_pull_image.webp');
+            addAchievement('rug_pull', '🐔 Поступок петушары. Сделать RUG PULL!');
+            showAchievementNotification('🐔 Поступок петушары. Сделать RUG PULL!', 'rug_pull_image.webp');
             achievementSound.play();
             closeUpgradeModal();
             saveUserData();
@@ -191,46 +191,46 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     function checkScore() {
-        if (score >= 100) {
+        if (score >= 1000) { // Увеличиваем порог для появления кнопки Rug Pull
             rugPullButton.style.display = 'block';
             if (hint) {
                 hint.style.display = 'none';
             }
         }
 
-        if (score >= 20000) {
+        if (score >= 200000) { // Увеличиваем порог для изменения изображения
             gameImage.src = '2.png'; // Изменить изображение на 2.png
         }
     }
 
     function checkAchievements() {
-        if (score >= 10 && !achievementsUnlocked.includes('10')) {
-            addAchievement('10', 'Бомж. Заработать $10');
-            showAchievementNotification('Разблокирована ачивка: Бомж. Заработать $10');
+        if (score >= 1000 && !achievementsUnlocked.includes('1000')) {
+            addAchievement('1000', 'Бомж. Заработать $1000');
+            showAchievementNotification('Разблокирована ачивка: Бомж. Заработать $1000');
             achievementSound.play();
         }
-        if (score >= 15 && !achievementsUnlocked.includes('15')) {
-            addAchievement('15', 'Нищий. Заработать $15');
-            showAchievementNotification('Разблокирована ачивка: Нищий. Заработать $15');
+        if (score >= 5000 && !achievementsUnlocked.includes('5000')) {
+            addAchievement('5000', 'Нищий. Заработать $5000');
+            showAchievementNotification('Разблокирована ачивка: Нищий. Заработать $5000');
             achievementSound.play();
         }
-        if (score >= 20 && !achievementsUnlocked.includes('20')) {
-            addAchievement('20', 'Бедняк. Заработать $20');
-            showAchievementNotification('Разблокирована ачивка: Бедняк. Заработать $20');
+        if (score >= 10000 && !achievementsUnlocked.includes('10000')) {
+            addAchievement('10000', 'Бедняк. Заработать $10000');
+            showAchievementNotification('Разблокирована ачивка: Бедняк. Заработать $10000');
             achievementSound.play();
         }
-        if (score >= 50 && !achievementsUnlocked.includes('50')) {
-            addAchievement('50', 'Рабочий класс. Заработать $50');
-            showAchievementNotification('Разблокирована ачивка: Рабочий класс. Заработать $50');
+        if (score >= 50000 && !achievementsUnlocked.includes('50000')) {
+            addAchievement('50000', 'Рабочий класс. Заработать $50000');
+            showAchievementNotification('Разблокирована ачивка: Рабочий класс. Заработать $50000');
             achievementSound.play();
         }
-        if (score >= 100 && !achievementsUnlocked.includes('100')) {
-            addAchievement('100', 'Средний класс. Заработать $100. Разблокирована функция - "Rug pull"!');
-            showAchievementNotification('Разблокирована ачивка: Средний класс. Заработать $100. Разблокирована функция - "Rug pull"!');
+        if (score >= 100000 && !achievementsUnlocked.includes('100000')) {
+            addAchievement('100000', 'Средний класс. Заработать $100000. Разблокирована функция - "Rug pull"!');
+            showAchievementNotification('Разблокирована ачивка: Средний класс. Заработать $100000. Разблокирована функция - "Rug pull"!');
             achievementSound.play();
         }
-        if (score >= 20200 && !achievementsUnlocked.includes('20200')) {
-            addAchievement('20200', 'Дурачек');
+        if (score >= 2000000 && !achievementsUnlocked.includes('2000000')) {
+            addAchievement('2000000', 'Дурачек');
             showAchievementNotification('Разблокирована ачивка: "Дурачек". Хватит тыкать, пиздуй на завод!');
             achievementSound.play();
         }
@@ -304,13 +304,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // Загрузить уже разблокированные ачивки
     function loadAchievements() {
         const achievements = {
-            '10': 'Бомж. Заработать $10',
-            '15': 'Нищий. Заработать $15',
-            '20': 'Бедняк. Заработать $20',
-            '50': 'Рабочий класс. Заработать $50',
-            '100': 'Средний класс. Заработать $100',
-            'rug_pull': '🐔 Петушара. Сделать RUG PULL!',
-            '20200': 'Дурачек'
+            '1000': 'Бомж. Заработать $1000',
+            '5000': 'Нищий. Заработать $5000',
+            '10000': 'Бедняк. Заработать $10000',
+            '50000': 'Рабочий класс. Заработать $50000',
+            '100000': 'Средний класс. Заработать $100000',
+            'rug_pull': '🐔 Поступок петушары. Сделать RUG PULL!',
+            '2000000': 'Дурачек'
         };
         if (achievementsUnlocked && Array.isArray(achievementsUnlocked)) {
             achievementsUnlocked.forEach(key => {
@@ -325,14 +325,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Проверка счета при загрузке страницы
     function checkScoreOnLoad() {
-        if (score >= 100) {
+        if (score >= 1000) {
             rugPullButton.style.display = 'block';
             if (hint) {
                 hint.style.display = 'none';
             }
         }
 
-        if (score >= 20000) {
+        if (score >= 200000) {
             gameImage.src = '2.png'; // Изменить изображение на 2.png
         }
     }
