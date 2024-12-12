@@ -8,91 +8,92 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-<div class="container">
-    <div class="header">
-        <div>
-            <img id="achievementsButton" src="./icon/achievements.svg" alt="Achievements" style="width: 30px; cursor: pointer;">
-            <p class="description">Achievements</p>
-        </div>
-        <div class="header-buttons">
+    <div class="container">
+        <div class="header">
             <div>
-                <img id="resetButton" src="./icon/exit.svg" alt="Reset Progress" style="width: 30px; cursor: pointer;">
-                <p class="description">Create new coin</p>
+                <img id="achievementsButton" src="./icon/achievements.svg" alt="Achievements" style="width: 30px; cursor: pointer;">
+                <p class="description">Achievements</p>
             </div>
-            <div>
-                <img id="addToHomeScreenButton" src="./icon/add_to_home.svg" alt="Add to Home Screen" style="width: 30px; cursor: pointer;">
-                <p class="description">Add homescreen</p>
-            </div>
-        </div>
-    </div>
-    <p id="score">$0</p>
-    <img id="gameImage" src="1.png" alt="Game Image" style="display: block; margin: 20px auto; width: 75%;">
-    <div style="bottom: 27px; position: absolute; left: 10px; right: 10px;">
-        <button id="clickButton" style="display: none">💰 Бабло </button>
-        <button id="upgradeButton" style="background-color: blue; color: white;">
-            <img src="./icon/upgrade.svg" alt="Upgrade Icon">
-            Прокачка
-        </button>
-        <div class="footer">
-            <div style="display: flex; margin: 5px; justify-content: center; align-items: center;">
-                <img id="gameImage" src="cosmo.png" alt="Game Image" style="display: block; width: 20%; margin-right: 5px;">
-                <a href="https://teletype.in/@sunspace_spc/links" target="_blank" style="text-decoration: none; color: black;">SunSpace Empire</a>
-            </div>
-            |
-            <div style="display: flex; margin: 5px; justify-content: center; align-items: center;">
-                <img id="starImage" src="./icon/star.webp" alt="Star Image" style="display: block; width: 15%; margin-right: 5px;">
-                <a href="https://t.me/SunSpace_Robot?start=go280591475=stars" style="text-decoration: none; color: black;">Купить TG Stars</a>
+            <div class="header-buttons">
+                <div>
+                    <img id="resetButton" src="./icon/exit.svg" alt="Reset Progress" style="width: 30px; cursor: pointer;">
+                    <p class="description">Create new coin</p>
+                </div>
+                <div>
+                    <img id="addToHomeScreenButton" src="./icon/add_to_home.svg" alt="Add to Home Screen" style="width: 30px; cursor: pointer;">
+                    <p class="description">Add homescreen</p>
+                </div>
             </div>
         </div>
-    </div>
-    <audio id="clickSound" src="mario_coin_sound.mp3"></audio>
-    <audio id="achievementSound" src="yamete_kudasai.mp3"></audio>
-</div>
+        <p id="score">$0</p>
+        <img id="gameImage" src="1.png" alt="Game Image" style="display: block; margin: 20px auto; width: 75%;">
+        <div style="bottom: 27px; position: absolute; left: 10px; right: 10px;">
+            <button id="clickButton" style="display: none">💰 Бабло </button>
+            <button id="upgradeButton" style="background-color: blue; color: white;">
+                <img src="./icon/upgrade.svg" alt="Upgrade Icon">
+                Прокачка
+            </button>
 
-<!-- Modal for achievements -->
-<div id="achievementsModal" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>Ачивки</h2>
-        <ul id="achievementList"></ul>
+            <div class="footer">
+                <div style="display: flex; margin: 5px; justify-content: center; align-items: center;">
+                    <img id="gameImage" src="cosmo.png" alt="Game Image" style="display: block; width: 20%; margin-right: 5px;">
+                    <a href="https://teletype.in/@sunspace_spc/links" target="_blank" style="text-decoration: none; color: black;">SunSpace Empire</a>
+                </div>
+                 |
+                <div style="display: flex; margin: 5px; justify-content: center; align-items: center;">
+                    <img id="starImage" src="./icon/star.webp" alt="Star Image" style="display: block; width: 15%; margin-right: 5px;">
+                    <a href="https://t.me/SunSpace_Robot?start=go280591475=stars" style="text-decoration: none; color: black;">Купить TG Stars</a>
+                </div>
+            </div>
+        </div>
+        <audio id="clickSound" src="mario_coin_sound.mp3"></audio>
+        <audio id="achievementSound" src="yamete_kudasai.mp3"></audio>
     </div>
-</div>
 
-<!-- Modal for new achievement notification -->
-<div id="achievementNotificationModal" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2 id="achievementNotificationText"></h2>
-        <img id="achievementImage" src="" alt="Achievement Image" style="display: none; width: 100%; margin-top: 20px;">
+    <!-- Modal for achievements -->
+    <div id="achievementsModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Ачивки</h2>
+            <ul id="achievementList"></ul>
+        </div>
     </div>
-</div>
 
-<!-- Modal for hint notification -->
-<div id="hintNotificationModal" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2 id="hintNotificationText"></h2>
+    <!-- Modal for new achievement notification -->
+    <div id="achievementNotificationModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="achievementNotificationText"></h2>
+            <img id="achievementImage" src="" alt="Achievement Image" style="display: none; width: 100%; margin-top: 20px;">
+        </div>
     </div>
-</div>
 
-<!-- Modal for notification -->
-<div id="notificationModal" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2 id="notificationText"></h2>
+    <!-- Modal for hint notification -->
+    <div id="hintNotificationModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="hintNotificationText"></h2>
+        </div>
     </div>
-</div>
 
-<!-- Modal for upgrade options -->
-<div id="upgradeModal" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>Upgrade Options</h2>
-        <button id="upgradeClickButton">Upgrade Click</button>
-        <button id="rugPullButton" style="display: none; background-color: red;">Rug Pull</button>
+    <!-- Modal for notification -->
+    <div id="notificationModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="notificationText"></h2>
+        </div>
     </div>
-</div>
 
-<script src="script.js"></script>
+    <!-- Modal for upgrade options -->
+    <div id="upgradeModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Upgrade Options</h2>
+            <button id="upgradeClickButton">Upgrade Click</button>
+            <button id="rugPullButton" style="display: none; background-color: red;">Rug Pull</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
