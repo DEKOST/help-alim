@@ -182,7 +182,7 @@ document.addEventListener('DOMContentLoaded', function() {
             achievementSound.play();
             closeUpgradeModal();
             saveUserData();
-            resetButton.style.display = 'block'; // Показать кнопку resetButton
+            resetButton.style.display = 'inline'; // Показать кнопку resetButton
             resetButtonText.style.display = 'block'; // Показать кнопку resetButtonText
         } else {
             closeUpgradeModal();
