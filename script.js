@@ -1,12 +1,17 @@
+//script.js
 document.addEventListener('DOMContentLoaded', function() {
     const tg = window.Telegram.WebApp;
     tg.expand();
 
-    const userId = tg.initDataUnsafe.user.id;
-    const username = tg.initDataUnsafe.user.username;
+    const userId = tg.initDataUnsafe?.user?.id;
+    const username = tg.initDataUnsafe?.user?.username;
 
-    console.log('User ID:', userId);
-    console.log('Username:', username);
+    if (!userId || !username) {
+        console.error('Unable to retrieve user data');
+    } else {
+        console.log('User ID:', userId);
+        console.log('Username:', username);
+    }
 
     // Отправка данных на сервер
     fetch('/.netlify/functions/saveUserData', {
@@ -15,7 +20,14 @@ document.addEventListener('DOMContentLoaded', function() {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({ userId, username })
-    });
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Server response:', data);
+        })
+        .catch(error => {
+            console.error('Error sending data to server:', error);
+        });
     
     const clickButton = document.getElementById('clickButton');
     const upgradeButton = document.getElementById('upgradeButton');
