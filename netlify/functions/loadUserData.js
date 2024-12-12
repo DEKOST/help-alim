@@ -27,12 +27,19 @@ exports.handler = async function(event, context) {
 
         return {
             statusCode: 200,
+            headers: {
+                'Access-Control-Allow-Origin': '*', // Разрешаем все домены
+                'Content-Type': 'application/json'
+            },
             body: JSON.stringify({ data: userData?.data || {} })
         };
     } catch (error) {
         console.error(error);
         return {
             statusCode: 500,
+            headers: {
+                'Access-Control-Allow-Origin': '*'
+            },
             body: JSON.stringify({ error: error.message })
         };
     }
