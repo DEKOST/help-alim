@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (storedData) {
                     score = storedData.score;
                     add20000ButtonClicked = storedData.add20000ButtonClicked;
-                    achievementsUnlocked = storedData.achievementsUnlocked;
+                    achievementsUnlocked = storedData.achievementsUnlocked || [];
                     clickUpgradeLevel = storedData.clickUpgradeLevel;
                     clickUpgradeCost = storedData.clickUpgradeCost;
                     console.log('Data loaded from server');
@@ -304,13 +304,15 @@ document.addEventListener('DOMContentLoaded', function() {
             'rug_pull': '🐔 Петушара. Сделать RUG PULL!',
             '20200': 'Дурачек'
         };
-        achievementsUnlocked.forEach(key => {
-            if (achievements[key]) {
-                const achievementItem = document.createElement('li');
-                achievementItem.textContent = achievements[key];
-                achievementList.appendChild(achievementItem);
-            }
-        });
+        if (achievementsUnlocked && Array.isArray(achievementsUnlocked)) {
+            achievementsUnlocked.forEach(key => {
+                if (achievements[key]) {
+                    const achievementItem = document.createElement('li');
+                    achievementItem.textContent = achievements[key];
+                    achievementList.appendChild(achievementItem);
+                }
+            });
+        }
     }
 
     // Проверка счета при загрузке страницы
@@ -322,7 +324,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        if (score >= 20000) {
+        if (score >= 20200) {
             gameImage.src = '2.png'; // Изменить изображение на 2.png
         }
     }
