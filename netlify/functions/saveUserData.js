@@ -6,7 +6,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 exports.handler = async function(event, context) {
     await client.connect();
     const database = client.db(process.env.MONGODB_DBNAME);
-    const collection = database.collection('users');
+    const collection = database.collection('app');
 
     const { userId, username } = JSON.parse(event.body);
 
