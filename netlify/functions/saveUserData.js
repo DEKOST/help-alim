@@ -2,10 +2,10 @@ const { MongoClient } = require('mongodb');
 
 const username = process.env.MONGODB_USER;
 const password = process.env.MONGODB_PASS;
-const encodedPassword = encodeURIComponent(password);
+// const encodedPassword = encodeURIComponent(password);
 const ip = process.env.MONGODB_IP;
 const dbName = process.env.MONGODB_DBNAME;
-const uri = `mongodb://${username}:${encodedPassword}@${ip}`;
+const uri = `mongodb://${username}:${password}@${ip}`;
 const mongoClient = new MongoClient(uri);
 const clientPromise = mongoClient.connect();
 
