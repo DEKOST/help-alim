@@ -9,8 +9,28 @@ const uri = `mongodb://${username}:${encodedPassword}@${ip}/`;
 const mongoClient = new MongoClient(uri);
 const clientPromise = mongoClient.connect();
 
+async function ensureDatabaseAndCollection() {
+    try {
+        const client = await clientPromise;
+        const database = client.db(dbName);
+
+        // Проверка существования коллекции и создание, если она не существует
+        const collections = await database.listCollections().toArray();
+        const collectionExists = collections.some(col => col.name === 'app');
+        if (!collectionExists) {
+            await database.createCollection('app');
+            console.log('Collection created successfully');
+        }
+    } catch (error) {
+        console.error('Error ensuring database and collection:', error);
+    }
+}
+
 exports.handler = async function(event, context) {
     try {
+        // Убедитесь, что база данных и коллекция существуют
+        await ensureDatabaseAndCollection();
+
         if (!event.body) {
             throw new Error("No data provided in request body");
         }
