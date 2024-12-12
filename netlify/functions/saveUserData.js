@@ -48,6 +48,8 @@ exports.handler = async function(event, context) {
             { upsert: true }
         );
 
+        console.log('Data saved to database:', { userId, username, data });
+
         return {
             statusCode: 200,
             body: JSON.stringify({ message: 'User data and localStorage saved', result })

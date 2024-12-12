@@ -23,6 +23,8 @@ exports.handler = async function(event, context) {
 
         const userData = await collection.findOne({ userId });
 
+        console.log('Data loaded from database:', userData);
+
         return {
             statusCode: 200,
             body: JSON.stringify({ data: userData?.data || {} })
