@@ -1,13 +1,13 @@
 const { MongoClient } = require('mongodb');
 
-// Инициализация MongoDB клиента один раз
-const client = new MongoClient(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-});
-
-// Подключение один раз и использование `clientPromise`
-const clientPromise = client.connect();
+const username = process.env.MONGODB_USER;
+const password = process.env.MONGODB_PASS;
+const encodedPassword = encodeURIComponent(password);
+const ip = encodeURIComponent(password);
+const uri = `mongodb://${username}:${encodedPassword}@${ip}`;
+const dbName = process.env.MONGODB_DBNAME;
+const mongoClient = new MongoClient(uri);
+const clientPromise = mongoClient.connect();
 
 exports.handler = async function(event, context) {
     try {
@@ -21,8 +21,8 @@ exports.handler = async function(event, context) {
             throw new Error("Missing userId or username");
         }
 
-        // Используем подключение из `clientPromise`
-        const database = (await clientPromise).db(process.env.MONGODB_DBNAME);
+        const client = await clientPromise;
+        const database = client.db(dbName);
         const collection = database.collection('app');
 
         const result = await collection.updateOne(
@@ -33,13 +33,13 @@ exports.handler = async function(event, context) {
 
         return {
             statusCode: 200,
-            body: JSON.stringify({ message: 'User data saved', result }),
+            body: JSON.stringify({ message: 'User data saved', result })
         };
     } catch (error) {
         console.error(error);
         return {
             statusCode: 500,
-            body: JSON.stringify({ error: error.message }),
+            body: JSON.stringify({ error: error.message })
         };
     }
 };
