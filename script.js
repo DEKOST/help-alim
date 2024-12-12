@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('Username:', username);
 
     let score = 0;
-    let add20000ButtonClicked = false;
+    let addRugPullClicked = false;
     let achievementsUnlocked = [];
     let clickUpgradeLevel = 0;
     let clickUpgradeCost = 100;
@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function saveUserData() {
         const data = {
             score,
-            add20000ButtonClicked,
+            addRugPullClicked,
             achievementsUnlocked,
             clickUpgradeLevel,
             clickUpgradeCost
@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log('Data loaded from server:', storedData);
                 if (storedData) {
                     score = storedData.score !== undefined ? storedData.score : 0;
-                    add20000ButtonClicked = storedData.add20000ButtonClicked !== undefined ? storedData.add20000ButtonClicked : false;
+                    addRugPullClicked = storedData.addRugPullClicked !== undefined ? storedData.addRugPullClicked : false;
                     achievementsUnlocked = storedData.achievementsUnlocked !== undefined ? storedData.achievementsUnlocked : [];
                     clickUpgradeLevel = storedData.clickUpgradeLevel !== undefined ? storedData.clickUpgradeLevel : 0;
                     clickUpgradeCost = storedData.clickUpgradeCost !== undefined ? storedData.clickUpgradeCost : 100;
@@ -176,10 +176,10 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     rugPullButton.addEventListener('click', function() {
-        if (!add20000ButtonClicked) {
+        if (!addRugPullClicked) {
             score += 20000;
             updateScoreDisplay();
-            add20000ButtonClicked = true;
+            addRugPullClicked = true;
             gameImage.src = '2.png'; // Изменить изображение на 2.png
             addAchievement('rug_pull', '🐔 Петушара. Сделать RUG PULL!');
             showAchievementNotification('🐔 Петушара. Сделать RUG PULL!', 'rug_pull_image.webp');
@@ -233,7 +233,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         if (score >= 20200 && !achievementsUnlocked.includes('20200')) {
             addAchievement('20200', 'Дурачек');
-            showAchievementNotification('Разблокирована ачивка: "Дурачек". Хватит тыкать, пиздюй на завод!');
+            showAchievementNotification('Разблокирована ачивка: "Дурачек". Хватит тыкать, пиздуй на завод!');
             achievementSound.play();
         }
     }
