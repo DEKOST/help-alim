@@ -81,6 +81,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const gameImage = document.getElementById('gameImage');
     const achievementsButton = document.getElementById('achievementsButton');
     const resetButton = document.getElementById('resetButton');
+    const resetButtonText = document.getElementById('resetButtonText');
     const addToHomeScreenButton = document.getElementById('addToHomeScreenButton');
     const achievementsModal = document.getElementById('achievementsModal');
     const achievementList = document.getElementById('achievementList');
@@ -102,7 +103,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function updateUpgradeButton() {
-        upgradeClickButton.textContent = `Upgrade Click ($${clickUpgradeCost})`;
+        upgradeClickButton.textContent = `Больше 💵 за клик ($${clickUpgradeCost})`;
     }
 
     function closeUpgradeModal() {
@@ -115,7 +116,7 @@ document.addEventListener('DOMContentLoaded', function() {
         clickCount++;
         if (clickCount >= 10) {
             saveUserData();
-            clickCount = 0; // Сброс счетчика нажатий
+            clickCount = 0;
         }
         checkScore();
         checkAchievements();
@@ -129,7 +130,7 @@ document.addEventListener('DOMContentLoaded', function() {
         clickCount++;
         if (clickCount >= 10) {
             saveUserData();
-            clickCount = 0; // Сброс счетчика нажатий
+            clickCount = 0;
         }
         checkScore();
         checkAchievements();
@@ -182,6 +183,7 @@ document.addEventListener('DOMContentLoaded', function() {
             closeUpgradeModal();
             saveUserData();
             resetButton.style.display = 'block'; // Показать кнопку resetButton
+            resetButtonText.style.display = 'block'; // Показать кнопку resetButtonText
         } else {
             closeUpgradeModal();
             showNotification('Ты больше не можешь воспользоваться этой функцией. Тебя изгнали! Иди на хуй! 🖕🖕🖕');
