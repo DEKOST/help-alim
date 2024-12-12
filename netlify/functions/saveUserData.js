@@ -4,8 +4,8 @@ const username = process.env.MONGODB_USER;
 const password = process.env.MONGODB_PASS;
 const encodedPassword = encodeURIComponent(password);
 const ip = encodeURIComponent(password);
-const uri = `mongodb://${username}:${encodedPassword}@${ip}`;
 const dbName = process.env.MONGODB_DBNAME;
+const uri = `mongodb://${username}:${encodedPassword}@${ip}/${dbName}`;
 const mongoClient = new MongoClient(uri);
 const clientPromise = mongoClient.connect();
 
