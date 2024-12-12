@@ -52,11 +52,11 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(data => {
                 const storedData = data.data;
                 if (storedData) {
-                    score = storedData.score;
-                    add20000ButtonClicked = storedData.add20000ButtonClicked;
-                    achievementsUnlocked = storedData.achievementsUnlocked || [];
-                    clickUpgradeLevel = storedData.clickUpgradeLevel;
-                    clickUpgradeCost = storedData.clickUpgradeCost;
+                    score = storedData.score !== undefined ? storedData.score : 0;
+                    add20000ButtonClicked = storedData.add20000ButtonClicked !== undefined ? storedData.add20000ButtonClicked : false;
+                    achievementsUnlocked = storedData.achievementsUnlocked !== undefined ? storedData.achievementsUnlocked : [];
+                    clickUpgradeLevel = storedData.clickUpgradeLevel !== undefined ? storedData.clickUpgradeLevel : 0;
+                    clickUpgradeCost = storedData.clickUpgradeCost !== undefined ? storedData.clickUpgradeCost : 100;
                     console.log('Data loaded from server');
                     updateScoreDisplay();
                     updateUpgradeButton();
