@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         localStorage.setItem(key, storedData[key]);
                     });
                     console.log('LocalStorage restored from server');
-                    location.reload(); // Перезагрузка для применения данных
+                    // location.reload(); // Перезагрузка для применения данных
                 }
             })
             .catch(error => {
@@ -132,10 +132,10 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     resetButton.addEventListener('click', function() {
+        console.log('Reset button clicked');
         localStorage.clear();
         location.reload();
     });
-
     addToHomeScreenButton.addEventListener('click', function() {
         if (window.Telegram.WebApp.initDataUnsafe) {
             const tg = window.Telegram.WebApp;
