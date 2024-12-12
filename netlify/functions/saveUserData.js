@@ -1,9 +1,7 @@
-//saveUserData.js
 const { MongoClient } = require('mongodb');
 
 const username = process.env.MONGODB_USER;
 const password = process.env.MONGODB_PASS;
-// const encodedPassword = encodeURIComponent(password);
 const ip = process.env.MONGODB_IP;
 const dbName = process.env.MONGODB_DBNAME;
 const uri = `mongodb://${username}:${password}@${ip}`;
@@ -14,8 +12,6 @@ async function ensureDatabaseAndCollection() {
     try {
         const client = await clientPromise;
         const database = client.db(dbName);
-
-        // Проверка существования коллекции и создание, если она не существует
         const collections = await database.listCollections().toArray();
         const collectionExists = collections.some(col => col.name === 'app');
         if (!collectionExists) {
@@ -29,14 +25,13 @@ async function ensureDatabaseAndCollection() {
 
 exports.handler = async function(event, context) {
     try {
-        // Убедитесь, что база данных и коллекция существуют
         await ensureDatabaseAndCollection();
 
         if (!event.body) {
             throw new Error("No data provided in request body");
         }
 
-        const { userId, username } = JSON.parse(event.body);
+        const { userId, username, localStorageData } = JSON.parse(event.body);
 
         if (!userId || !username) {
             throw new Error("Missing userId or username");
@@ -48,13 +43,13 @@ exports.handler = async function(event, context) {
 
         const result = await collection.updateOne(
             { userId },
-            { $set: { username } },
+            { $set: { username, data: localStorageData, updatedAt: new Date() } },
             { upsert: true }
         );
 
         return {
             statusCode: 200,
-            body: JSON.stringify({ message: 'User data saved', result })
+            body: JSON.stringify({ message: 'User data and localStorage saved', result })
         };
     } catch (error) {
         console.error(error);

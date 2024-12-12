@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         localStorage.setItem(key, storedData[key]);
                     });
                     console.log('LocalStorage restored from server');
-                    // location.reload(); // Перезагрузка для применения данных
+                    location.reload(); // Перезагрузка для применения данных
                 }
             })
             .catch(error => {
@@ -56,14 +56,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     }
 
-    // Сохранение данных при изменении localStorage
-    window.addEventListener('beforeunload', saveUserData);
-
-    // Загрузка данных при запуске
-    loadUserData();
-
-
-    
     const clickButton = document.getElementById('clickButton');
     const upgradeButton = document.getElementById('upgradeButton');
     const upgradeClickButton = document.getElementById('upgradeClickButton');
@@ -132,10 +124,10 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     resetButton.addEventListener('click', function() {
-        console.log('Reset button clicked');
         localStorage.clear();
         location.reload();
     });
+
     addToHomeScreenButton.addEventListener('click', function() {
         if (window.Telegram.WebApp.initDataUnsafe) {
             const tg = window.Telegram.WebApp;
@@ -343,4 +335,10 @@ document.addEventListener('DOMContentLoaded', function() {
             this.parentElement.parentElement.style.display = 'none';
         });
     });
+
+    // Сохранение данных при изменении localStorage
+    window.addEventListener('beforeunload', saveUserData);
+
+    // Загрузка данных при запуске
+    loadUserData();
 });
