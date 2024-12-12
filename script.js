@@ -20,7 +20,14 @@ document.addEventListener('DOMContentLoaded', function() {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({ userId, username })
-    });
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Server response:', data);
+        })
+        .catch(error => {
+            console.error('Error sending data to server:', error);
+        });
     
     const clickButton = document.getElementById('clickButton');
     const upgradeButton = document.getElementById('upgradeButton');
