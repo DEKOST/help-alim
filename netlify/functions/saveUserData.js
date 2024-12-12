@@ -5,22 +5,41 @@ const password = process.env.MONGODB_PASS;
 const encodedPassword = encodeURIComponent(password);
 const ip = encodeURIComponent(password);
 const dbName = process.env.MONGODB_DBNAME;
-const uri = `mongodb://${username}:${encodedPassword}@${ip}`;
+const uri = `mongodb://${username}:${encodedPassword}@${ip}/`;
 const mongoClient = new MongoClient(uri);
 const clientPromise = mongoClient.connect();
 
-async function createDatabaseAndCollection() {
+exports.handler = async function(event, context) {
     try {
+        if (!event.body) {
+            throw new Error("No data provided in request body");
+        }
+
+        const { userId, username } = JSON.parse(event.body);
+
+        if (!userId || !username) {
+            throw new Error("Missing userId or username");
+        }
+
         const client = await clientPromise;
         const database = client.db(dbName);
+        const collection = database.collection('app');
 
-        // Создание коллекции, если она еще не существует
-        await database.createCollection('test');
+        const result = await collection.updateOne(
+            { userId },
+            { $set: { username } },
+            { upsert: true }
+        );
 
-        console.log('Database and collection created successfully');
+        return {
+            statusCode: 200,
+            body: JSON.stringify({ message: 'User data saved', result })
+        };
     } catch (error) {
-        console.error('Error creating database and collection:', error);
+        console.error(error);
+        return {
+            statusCode: 500,
+            body: JSON.stringify({ error: error.message })
+        };
     }
-}
-
-createDatabaseAndCollection();
+};
