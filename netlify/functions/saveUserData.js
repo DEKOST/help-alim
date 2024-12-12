@@ -1,7 +1,9 @@
 const { MongoClient } = require('mongodb');
 
 const uri = process.env.MONGODB_URI;
+console.log('Connecting to MongoDB with URI:', uri);
 const dbName = process.env.MONGODB_DBNAME;
+console.log('Connecting to MongoDB with URI:', dbName);
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 exports.handler = async function(event, context) {
