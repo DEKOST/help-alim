@@ -142,21 +142,16 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     resetButton.addEventListener('click', function() {
-        fetch('/.netlify/functions/resetUserData', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ userId })
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Server response:', data);
-                location.reload();
-            })
-            .catch(error => {
-                console.error('Error resetting data:', error);
-            });
+        if (score >= 10) {
+            score = Math.round(score * 0.1); // Отнимаем 90% очков
+            updateScoreDisplay();
+            addAchievement('reset', 'Сброс прогресса');
+            showAchievementNotification('Сброс прогресса');
+            achievementSound.play();
+            saveUserData();
+        } else {
+            showNotification('Недостаточно очков для сброса прогресса!');
+        }
     });
 
     addToHomeScreenButton.addEventListener('click', function() {
@@ -186,6 +181,7 @@ document.addEventListener('DOMContentLoaded', function() {
             achievementSound.play();
             closeUpgradeModal();
             saveUserData();
+            resetButton.style.display = 'block'; // Показать кнопку resetButton
         } else {
             closeUpgradeModal();
             showNotification('Ты больше не можешь воспользоваться этой функцией. Тебя изгнали! Иди на хуй! 🖕🖕🖕');
