@@ -1,4 +1,3 @@
-//script.js
 document.addEventListener('DOMContentLoaded', function() {
     const tg = window.Telegram.WebApp;
     tg.expand();
@@ -14,19 +13,28 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('User ID:', userId);
     console.log('Username:', username);
 
-    // Функция для отправки всех данных из localStorage на сервер
+    let score = 0;
+    let add20000ButtonClicked = false;
+    let achievementsUnlocked = [];
+    let clickUpgradeLevel = 0;
+    let clickUpgradeCost = 100;
+
+    // Функция для отправки всех данных на сервер
     function saveUserData() {
-        const localStorageData = {};
-        Object.keys(localStorage).forEach(key => {
-            localStorageData[key] = localStorage.getItem(key);
-        });
+        const data = {
+            score,
+            add20000ButtonClicked,
+            achievementsUnlocked,
+            clickUpgradeLevel,
+            clickUpgradeCost
+        };
 
         fetch('/.netlify/functions/saveUserData', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ userId, username, localStorageData })
+            body: JSON.stringify({ userId, username, data })
         })
             .then(response => response.json())
             .then(data => {
@@ -37,18 +45,23 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     }
 
-    // Функция для загрузки данных с сервера и восстановления localStorage
+    // Функция для загрузки данных с сервера
     function loadUserData() {
         fetch(`/.netlify/functions/loadUserData?userId=${userId}`)
             .then(response => response.json())
             .then(data => {
                 const storedData = data.data;
                 if (storedData) {
-                    Object.keys(storedData).forEach(key => {
-                        localStorage.setItem(key, storedData[key]);
-                    });
-                    console.log('LocalStorage restored from server');
-                    location.reload(); // Перезагрузка для применения данных
+                    score = storedData.score;
+                    add20000ButtonClicked = storedData.add20000ButtonClicked;
+                    achievementsUnlocked = storedData.achievementsUnlocked;
+                    clickUpgradeLevel = storedData.clickUpgradeLevel;
+                    clickUpgradeCost = storedData.clickUpgradeCost;
+                    console.log('Data loaded from server');
+                    updateScoreDisplay();
+                    updateUpgradeButton();
+                    loadAchievements();
+                    checkScoreOnLoad();
                 }
             })
             .catch(error => {
@@ -79,11 +92,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const upgradeModal = document.getElementById('upgradeModal');
     const clickSound = document.getElementById('clickSound');
     const achievementSound = document.getElementById('achievementSound');
-    let score = localStorage.getItem('score') ? parseInt(localStorage.getItem('score')) : 0;
-    let add20000ButtonClicked = localStorage.getItem('add20000ButtonClicked') === 'true';
-    let achievementsUnlocked = JSON.parse(localStorage.getItem('achievementsUnlocked')) || [];
-    let clickUpgradeLevel = localStorage.getItem('clickUpgradeLevel') ? parseInt(localStorage.getItem('clickUpgradeLevel')) : 0;
-    let clickUpgradeCost = localStorage.getItem('clickUpgradeCost') ? parseInt(localStorage.getItem('clickUpgradeCost')) : 100;
 
     scoreDisplay.textContent = `$${score}`;
 
@@ -102,7 +110,7 @@ document.addEventListener('DOMContentLoaded', function() {
     clickButton.addEventListener('click', function() {
         score += 1 + clickUpgradeLevel; // Увеличиваем score в зависимости от уровня прокачки
         updateScoreDisplay();
-        localStorage.setItem('score', score);
+        saveUserData();
         checkScore();
         checkAchievements();
         playClickSound();
@@ -112,7 +120,7 @@ document.addEventListener('DOMContentLoaded', function() {
     gameImage.addEventListener('click', function() {
         score += 1 + clickUpgradeLevel; // Увеличиваем score в зависимости от уровня прокачки
         updateScoreDisplay();
-        localStorage.setItem('score', score);
+        saveUserData();
         checkScore();
         checkAchievements();
         playClickSound();
@@ -124,8 +132,21 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     resetButton.addEventListener('click', function() {
-        localStorage.clear();
-        location.reload();
+        fetch('/.netlify/functions/resetUserData', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ userId })
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Server response:', data);
+                location.reload();
+            })
+            .catch(error => {
+                console.error('Error resetting data:', error);
+            });
     });
 
     addToHomeScreenButton.addEventListener('click', function() {
@@ -148,14 +169,13 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!add20000ButtonClicked) {
             score += 20000;
             updateScoreDisplay();
-            localStorage.setItem('score', score);
             add20000ButtonClicked = true;
-            localStorage.setItem('add20000ButtonClicked', 'true');
             gameImage.src = '2.png'; // Изменить изображение на 2.png
             addAchievement('rug_pull', '🐔 Петушара. Сделать RUG PULL!');
             showAchievementNotification('🐔 Петушара. Сделать RUG PULL!', 'rug_pull_image.webp');
             achievementSound.play();
             closeUpgradeModal();
+            saveUserData();
         } else {
             closeUpgradeModal();
             showNotification('Ты больше не можешь воспользоваться этой функцией. Тебя изгнали! Иди на хуй! 🖕🖕🖕');
@@ -174,7 +194,6 @@ document.addEventListener('DOMContentLoaded', function() {
             gameImage.src = '2.png'; // Изменить изображение на 2.png
         }
     }
-
 
     function checkAchievements() {
         if (score >= 10 && !achievementsUnlocked.includes('10')) {
@@ -215,7 +234,7 @@ document.addEventListener('DOMContentLoaded', function() {
             achievementItem.textContent = text;
             achievementList.appendChild(achievementItem);
             achievementsUnlocked.push(key);
-            localStorage.setItem('achievementsUnlocked', JSON.stringify(achievementsUnlocked));
+            saveUserData();
         }
     }
 
@@ -316,10 +335,8 @@ document.addEventListener('DOMContentLoaded', function() {
             clickUpgradeCost = Math.round(clickUpgradeCost * 1.25); // Увеличиваем стоимость прокачки на 1.25
             updateScoreDisplay();
             updateUpgradeButton();
-            localStorage.setItem('score', score);
-            localStorage.setItem('clickUpgradeLevel', clickUpgradeLevel);
-            localStorage.setItem('clickUpgradeCost', clickUpgradeCost);
             showNotification(`Клик прокачан до уровня ${clickUpgradeLevel}!`);
+            saveUserData();
         } else {
             showNotification('Недостаточно денег для прокачки клика!');
         }
@@ -336,7 +353,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Сохранение данных при изменении localStorage
+    // Сохранение данных при изменении
     window.addEventListener('beforeunload', saveUserData);
 
     // Загрузка данных при запуске

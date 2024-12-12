@@ -1,11 +1,13 @@
+//saveUserDate
 const { MongoClient } = require('mongodb');
 
-const username = process.env.MONGODB_USER;
-const password = process.env.MONGODB_PASS;
-const ip = process.env.MONGODB_IP;
+const uri = process.env.MONGODB_URI;
 const dbName = process.env.MONGODB_DBNAME;
-const uri = `mongodb://${username}:${password}@${ip}`;
-const mongoClient = new MongoClient(uri);
+const mongoClient = new MongoClient(uri, {
+    serverSelectionTimeoutMS: 5000,
+    socketTimeoutMS: 45000,
+    connectTimeoutMS: 30000
+});
 const clientPromise = mongoClient.connect();
 
 async function ensureDatabaseAndCollection() {
@@ -31,7 +33,7 @@ exports.handler = async function(event, context) {
             throw new Error("No data provided in request body");
         }
 
-        const { userId, username, localStorageData } = JSON.parse(event.body);
+        const { userId, username, data } = JSON.parse(event.body);
 
         if (!userId || !username) {
             throw new Error("Missing userId or username");
@@ -43,7 +45,7 @@ exports.handler = async function(event, context) {
 
         const result = await collection.updateOne(
             { userId },
-            { $set: { username, data: localStorageData, updatedAt: new Date() } },
+            { $set: { username, data, updatedAt: new Date() } },
             { upsert: true }
         );
 
@@ -59,3 +61,4 @@ exports.handler = async function(event, context) {
         };
     }
 };
+

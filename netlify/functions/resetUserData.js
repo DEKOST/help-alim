@@ -1,4 +1,4 @@
-//loadUserDate
+//resetUserData
 const { MongoClient } = require('mongodb');
 
 const uri = process.env.MONGODB_URI;
@@ -12,7 +12,7 @@ const clientPromise = mongoClient.connect();
 
 exports.handler = async function(event, context) {
     try {
-        const { userId } = event.queryStringParameters;
+        const { userId } = JSON.parse(event.body);
 
         if (!userId) {
             throw new Error("Missing userId");
@@ -22,11 +22,11 @@ exports.handler = async function(event, context) {
         const database = client.db(dbName);
         const collection = database.collection('app');
 
-        const userData = await collection.findOne({ userId });
+        const result = await collection.deleteOne({ userId });
 
         return {
             statusCode: 200,
-            body: JSON.stringify({ data: userData?.data || {} })
+            body: JSON.stringify({ message: 'User data reset', result })
         };
     } catch (error) {
         console.error(error);
