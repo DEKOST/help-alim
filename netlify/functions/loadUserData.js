@@ -1,34 +1,36 @@
-const axios = require('axios');
+const { MongoClient } = require('mongodb');
 
-const BIN_ID = process.env.BIN_ID; // Замените на ваш Bin ID
-const SECRET_KEY = process.env.SECRET_KEY; // Замените на ваш Secret Key
-
-// Функция для чтения данных из JSONBin.io
-async function readDatabase() {
-    const response = await axios.get(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
-        headers: {
-            'X-Master-Key': SECRET_KEY
-        }
-    });
-    return response.data.record;
-}
+const username = process.env.MONGODB_USER;
+const password = process.env.MONGODB_PASS;
+const ip = process.env.MONGODB_IP;
+const dbName = process.env.MONGODB_DBNAME;
+const uri = `mongodb://${username}:${password}@${ip}`;
+const mongoClient = new MongoClient(uri);
+const clientPromise = mongoClient.connect();
 
 exports.handler = async function(event, context) {
     try {
-        const database = await readDatabase();
-        const { userId } = JSON.parse(event.body);
+        const { userId } = event.queryStringParameters;
 
-        // Проверка, существует ли пользователь
-        const user = database.users.find(u => u.userId === userId);
+        if (!userId) {
+            throw new Error("Missing userId");
+        }
+
+        const client = await clientPromise;
+        const database = client.db(dbName);
+        const collection = database.collection('app');
+
+        const userData = await collection.findOne({ userId });
 
         return {
             statusCode: 200,
-            body: JSON.stringify({ user })
+            body: JSON.stringify({ data: userData?.data || {} })
         };
     } catch (error) {
+        console.error(error);
         return {
             statusCode: 500,
-            body: JSON.stringify({ errorType: error.name, errorMessage: error.message, trace: error.stack.split('\n') })
+            body: JSON.stringify({ error: error.message })
         };
     }
 };

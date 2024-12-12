@@ -8,29 +8,61 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (!userId || !username) {
         console.error('Unable to retrieve user data');
-    } else {
-        console.log('User ID:', userId);
-        console.log('Username:', username);
+        return;
     }
 
-    // Отправка данных на сервер
-    fetch('/.netlify/functions/saveUserData', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ userId, username })
-    })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Server response:', data);
-            if (data.error) {
-                console.error('Server error:', data.error);
-            }
-        })
-        .catch(error => {
-            console.error('Network error:', error);
+    console.log('User ID:', userId);
+    console.log('Username:', username);
+
+    // Функция для отправки всех данных из localStorage на сервер
+    function saveUserData() {
+        const localStorageData = {};
+        Object.keys(localStorage).forEach(key => {
+            localStorageData[key] = localStorage.getItem(key);
         });
+
+        fetch('/.netlify/functions/saveUserData', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ userId, username, localStorageData })
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Server response:', data);
+            })
+            .catch(error => {
+                console.error('Error sending data to server:', error);
+            });
+    }
+
+    // Функция для загрузки данных с сервера и восстановления localStorage
+    function loadUserData() {
+        fetch(`/.netlify/functions/loadUserData?userId=${userId}`)
+            .then(response => response.json())
+            .then(data => {
+                const storedData = data.data;
+                if (storedData) {
+                    Object.keys(storedData).forEach(key => {
+                        localStorage.setItem(key, storedData[key]);
+                    });
+                    console.log('LocalStorage restored from server');
+                    location.reload(); // Перезагрузка для применения данных
+                }
+            })
+            .catch(error => {
+                console.error('Error loading data from server:', error);
+            });
+    }
+
+    // Сохранение данных при изменении localStorage
+    window.addEventListener('beforeunload', saveUserData);
+
+    // Загрузка данных при запуске
+    loadUserData();
+
+
     
     const clickButton = document.getElementById('clickButton');
     const upgradeButton = document.getElementById('upgradeButton');
