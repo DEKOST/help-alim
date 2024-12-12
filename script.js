@@ -51,13 +51,14 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => response.json())
             .then(data => {
                 const storedData = data.data;
+                console.log('Data loaded from server:', storedData);
                 if (storedData) {
                     score = storedData.score !== undefined ? storedData.score : 0;
                     add20000ButtonClicked = storedData.add20000ButtonClicked !== undefined ? storedData.add20000ButtonClicked : false;
                     achievementsUnlocked = storedData.achievementsUnlocked !== undefined ? storedData.achievementsUnlocked : [];
                     clickUpgradeLevel = storedData.clickUpgradeLevel !== undefined ? storedData.clickUpgradeLevel : 0;
                     clickUpgradeCost = storedData.clickUpgradeCost !== undefined ? storedData.clickUpgradeCost : 100;
-                    console.log('Data loaded from server');
+                    console.log('Data applied from server');
                     updateScoreDisplay();
                     updateUpgradeButton();
                     loadAchievements();
@@ -324,7 +325,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        if (score >= 20200) {
+        if (score >= 20000) {
             gameImage.src = '2.png'; // Изменить изображение на 2.png
         }
     }
