@@ -21,7 +21,7 @@ exports.handler = async function(event, context) {
         const database = client.db(dbName);
         const collection = database.collection('app');
 
-        const userData = await collection.findOne({ userId });
+        const userData = await collection.findOne({ userId: userId.toString() });
 
         console.log('Data loaded from database:', userData);
 

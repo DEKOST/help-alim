@@ -21,7 +21,7 @@ exports.handler = async function(event, context) {
         const database = client.db(dbName);
         const collection = database.collection('app');
 
-        const result = await collection.deleteOne({ userId });
+        const result = await collection.deleteOne({ userId: userId.toString() });
 
         return {
             statusCode: 200,

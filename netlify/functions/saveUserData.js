@@ -43,7 +43,7 @@ exports.handler = async function(event, context) {
         const collection = database.collection('app');
 
         const result = await collection.updateOne(
-            { userId },
+            { userId: userId.toString() }, // Преобразование userId в строку
             { $set: { username, data, updatedAt: new Date() } },
             { upsert: true }
         );
