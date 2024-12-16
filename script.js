@@ -215,6 +215,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const effect = getRandomEffect();
         score += effect;
         updateScoreDisplay();
+        closeUpgradeModal();
         showNotification(`Ты забил кальян и расслабился. ${effect >= 0 ? '+' : ''}${effect} $!`);
         saveUserData();
     });
@@ -223,6 +224,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const effect = getRandomEffect();
         score += effect;
         updateScoreDisplay();
+        closeUpgradeModal();
         showNotification(`Ты провел AMA сессию и ${effect >= 0 ? 'получил' : 'потерял'} ${effect >= 0 ? '+' : ''}${effect} $!`);
         saveUserData();
     });
@@ -231,6 +233,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const effect = getRandomEffect();
         score += effect;
         updateScoreDisplay();
+        closeUpgradeModal();
         showNotification(`Ты погрустил и ${effect >= 0 ? 'получил' : 'потерял'} мотивацию. ${effect >= 0 ? '+' : ''}${effect} $!`);
         saveUserData();
     });
