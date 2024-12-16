@@ -21,6 +21,7 @@ exports.handler = async (event) => {
         });
 
         const data = await response.json();
+        console.log('Telegram API Response:', data);
 
         if (data.ok) {
             return { statusCode: 200, body: JSON.stringify({ success: true }) };
