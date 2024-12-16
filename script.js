@@ -75,6 +75,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const upgradeButton = document.getElementById('upgradeButton');
     const upgradeClickButton = document.getElementById('upgradeClickButton');
     const rugPullButton = document.getElementById('rugPullButton');
+    const hookahButton = document.getElementById('hookahButton');
+    const amaButton = document.getElementById('amaButton');
+    const sadButton = document.getElementById('sadButton');
     const scoreDisplay = document.getElementById('score');
     const hint = document.getElementById('hint');
     const notification = document.getElementById('notification');
@@ -104,9 +107,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function updateUpgradeButton() {
         upgradeClickButton.textContent = `Больше 💵 за клик ($${clickUpgradeCost})`;
-        hookahButton.textContent = `💩 Забить кальян ($${clickUpgradeCost})`;
-        amaButton.textContent = `🤡 Провести AMA сессию ($${clickUpgradeCost})`;
-        sadButton.textContent = `☹️ Погрустить ($${clickUpgradeCost})`;
+        // hookahButton.textContent = `💩 Забить кальян ($${clickUpgradeCost})`;
+        // amaButton.textContent = `🤡 Провести AMA сессию ($${clickUpgradeCost})`;
+        // sadButton.textContent = `☹️ Погрустить ($${clickUpgradeCost})`;
     }
 
     function closeUpgradeModal() {
@@ -195,6 +198,30 @@ document.addEventListener('DOMContentLoaded', function() {
             showNotification('Ты больше не можешь сделать RUG PULL в этой монете. Тебя изгнали! Иди на хуй! 🖕🖕🖕');
             showNotification('Создавай новую монету что бы сделать RUG PULL еще раз');
         }
+    });
+
+    hookahButton.addEventListener('click', function() {
+        const randomValue = Math.floor(Math.random() * 20001) - 10000; // Генерация случайного числа от -10000 до +10000
+        score += randomValue;
+        updateScoreDisplay();
+        showNotification(`Ты забил кальян и расслабился. ${randomValue >= 0 ? '+' : ''}${randomValue} очков!`);
+        saveUserData();
+    });
+
+    amaButton.addEventListener('click', function() {
+        const randomValue = Math.floor(Math.random() * 20001) - 10000; // Генерация случайного числа от -10000 до +10000
+        score += randomValue;
+        updateScoreDisplay();
+        showNotification(`Ты провел AMA сессию и ${randomValue >= 0 ? 'получил' : 'потерял'} время. ${randomValue >= 0 ? '+' : ''}${randomValue} очков!`);
+        saveUserData();
+    });
+
+    sadButton.addEventListener('click', function() {
+        const randomValue = Math.floor(Math.random() * 20001) - 10000; // Генерация случайного числа от -10000 до +10000
+        score += randomValue;
+        updateScoreDisplay();
+        showNotification(`Ты погрустил и ${randomValue >= 0 ? 'получил' : 'потерял'} мотивацию. ${randomValue >= 0 ? '+' : ''}${randomValue} очков!`);
+        saveUserData();
     });
 
     function checkScore() {
