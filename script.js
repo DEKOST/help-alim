@@ -182,11 +182,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     rugPullButton.addEventListener('click', function() {
         if (!window.Telegram.WebApp.initDataUnsafe?.user) {
+            closeUpgradeModal();
             showNotification('Не удалось получить данные пользователя');
             return;
         }
 
         // Запрос на оплату Telegram Stars
+        closeUpgradeModal();
         window.Telegram.WebApp.showPopup({
             title: 'Покупка Rug Pull',
             message: 'Вы хотите купить функцию Rug Pull за 50 Telegram Stars?',
@@ -208,7 +210,7 @@ document.addEventListener('DOMContentLoaded', function() {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ userId, amount: 50, description: 'Покупка Rug Pull' })
+            body: JSON.stringify({ userId, amount: 1, description: 'Покупка Rug Pull' })
         })
             .then(response => response.json())
             .then(data => {
