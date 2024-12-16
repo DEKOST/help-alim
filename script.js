@@ -223,6 +223,7 @@ document.addEventListener('DOMContentLoaded', function() {
             showNotification(`Ты забил кальян и ${effect >= 0 ? 'расслабился' : 'расслабился так что обосрался'}. ${effect >= 0 ? '+' : ''}${effect}$!`);
             saveUserData();
         } else {
+            closeUpgradeModal();
             showNotification('Недостаточно денег для использования этой функции, нищеброд!');
         }
     });
@@ -239,6 +240,7 @@ document.addEventListener('DOMContentLoaded', function() {
             showNotification(`Ты провел AMA сессию и ${effect >= 0 ? 'получил респект и денег' : 'потерял время и деньги'}. ${effect >= 0 ? '+' : ''}${effect}$!`);
             saveUserData();
         } else {
+            closeUpgradeModal();
             showNotification('Недостаточно денег для использования этой функции, нищеброд!');
         }
     });
@@ -255,6 +257,7 @@ document.addEventListener('DOMContentLoaded', function() {
             showNotification(`Ты погрустил и ${effect >= 0 ? 'получил' : 'потерял'} мотивацию. ${effect >= 0 ? '+' : ''}${effect}$!`);
             saveUserData();
         } else {
+            closeUpgradeModal();
             showNotification('Недостаточно денег для использования этой функции, нищеброд!');
         }
     });
