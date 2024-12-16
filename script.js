@@ -185,6 +185,7 @@ document.addEventListener('DOMContentLoaded', function() {
             showNotification('Не удалось получить данные пользователя');
             return;
         }
+
         // Запрос на оплату Telegram Stars
         window.Telegram.WebApp.showPopup({
             title: 'Покупка Rug Pull',
@@ -198,25 +199,33 @@ document.addEventListener('DOMContentLoaded', function() {
                 initiatePayment();
             }
         });
-
-        if (!addRugPullClicked) {
-            score += 100000; // Увеличиваем стоимость Rug Pull до 100000
-            updateScoreDisplay();
-            addRugPullClicked = true;
-            gameImage.src = '2.png'; // Изменить изображение на 2.png
-            addAchievement('rug_pull', '🐔 Поступок петушары. Сделать RUG PULL!');
-            showAchievementNotification('🐔 Поступок петушары. Сделать RUG PULL!', 'rug_pull_image.webp');
-            achievementSound.play();
-            closeUpgradeModal();
-            saveUserData();
-            resetButton.style.display = 'inline'; // Показать кнопку resetButton
-            resetButtonText.style.display = 'block'; // Показать кнопку resetButtonText
-        } else {
-            closeUpgradeModal();
-            showNotification('Ты больше не можешь сделать RUG PULL в этой монете. Тебя изгнали! Иди на хуй! 🖕🖕🖕');
-            showNotification('Создавай новую монету что бы сделать RUG PULL еще раз');
-        }
     });
+
+// Функция для отправки запроса на оплату
+    function initiatePayment() {
+        fetch('/.netlify/functions/initiatePayment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ userId, amount: 50, description: 'Покупка Rug Pull' })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    score += 100000;
+                    updateScoreDisplay();
+                    showNotification('Rug Pull успешно приобретен!');
+                    saveUserData();
+                } else {
+                    showNotification('Ошибка при оплате: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error initiating payment:', error);
+                showNotification('Ошибка при выполнении платежа');
+            });
+    }
 
     function getRandomEffect() {
         const randomValue = Math.random();
