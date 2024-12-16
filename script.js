@@ -200,27 +200,38 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    function getRandomEffect() {
+        const randomValue = Math.random();
+        if (randomValue < 0.25) {
+            // 25% chance for a positive effect
+            return Math.floor(Math.random() * 10001); // Random value between 0 and 10000
+        } else {
+            // 75% chance for a negative effect
+            return -Math.floor(Math.random() * 10001); // Random value between -10000 and 0
+        }
+    }
+
     hookahButton.addEventListener('click', function() {
-        const randomValue = Math.floor(Math.random() * 20001) - 10000; // Генерация случайного числа от -10000 до +10000
-        score += randomValue;
+        const effect = getRandomEffect();
+        score += effect;
         updateScoreDisplay();
-        showNotification(`Ты забил кальян и расслабился. ${randomValue >= 0 ? '+' : ''}${randomValue} очков!`);
+        showNotification(`Ты забил кальян и расслабился. ${effect >= 0 ? '+' : ''}${effect} $!`);
         saveUserData();
     });
 
     amaButton.addEventListener('click', function() {
-        const randomValue = Math.floor(Math.random() * 20001) - 10000; // Генерация случайного числа от -10000 до +10000
-        score += randomValue;
+        const effect = getRandomEffect();
+        score += effect;
         updateScoreDisplay();
-        showNotification(`Ты провел AMA сессию и ${randomValue >= 0 ? 'получил' : 'потерял'} время. ${randomValue >= 0 ? '+' : ''}${randomValue} очков!`);
+        showNotification(`Ты провел AMA сессию и ${effect >= 0 ? 'получил' : 'потерял'} ${effect >= 0 ? '+' : ''}${effect} $!`);
         saveUserData();
     });
 
     sadButton.addEventListener('click', function() {
-        const randomValue = Math.floor(Math.random() * 20001) - 10000; // Генерация случайного числа от -10000 до +10000
-        score += randomValue;
+        const effect = getRandomEffect();
+        score += effect;
         updateScoreDisplay();
-        showNotification(`Ты погрустил и ${randomValue >= 0 ? 'получил' : 'потерял'} мотивацию. ${randomValue >= 0 ? '+' : ''}${randomValue} очков!`);
+        showNotification(`Ты погрустил и ${effect >= 0 ? 'получил' : 'потерял'} мотивацию. ${effect >= 0 ? '+' : ''}${effect} $!`);
         saveUserData();
     });
 
