@@ -7,13 +7,22 @@
     src: url("./fonts/GreenHillSans-Regular.ttf") format("truetype");
 }
 body {
-    font-family: Arial, sans-serif;
+    font-family: "GreenHillSans-Regular", sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
     background-color: #878787;
+}
+
+.fdescription {
+    font-family: "GreenHillSans-Regular", sans-serif;
+    font-size: 0.7em;
+}
+
+h2 {
+    font-family: "GreenHillSans-Regular", sans-serif;
 }
 
 .footer {
@@ -24,7 +33,7 @@ body {
     border-style: solid;
     border-radius: inherit;
     background-color: #8a8ee4;
-    font-family: "GreenHillSans-Regular";
+    font-family: "GreenHillSans-Regular", sans-serif;
     font-size: 0.8em;
     box-shadow: 5px 5px 10px;
 }
@@ -54,7 +63,7 @@ body {
 }
 
 #score {
-    font-family: "GreenHillSans-Regular";
+    font-family: "GreenHillSans-Regular", sans-serif;
     font-size: 2em;
     margin: 0;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Горизонтальное смещение, вертикальное смещение, размытие, цвет */
@@ -62,7 +71,7 @@ body {
 
 
 button {
-    font-family: "GreenHillSans-Regular";
+    font-family: "GreenHillSans-Regular", sans-serif;
     padding: 10px 20px;
     font-size: 1em;
     cursor: pointer;
