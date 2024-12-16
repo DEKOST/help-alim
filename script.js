@@ -193,7 +193,7 @@ document.addEventListener('DOMContentLoaded', function() {
             title: 'Покупка Rug Pull',
             message: 'Вы хотите купить функцию Rug Pull за 50 Telegram Stars?',
             buttons: [
-                { id: 'confirm', type: 'default', text: 'Купить за 50 ⭐' },
+                { id: 'confirm', type: 'default', text: 'Сделать RUG PULL за 50 ⭐' },
                 { id: 'cancel', type: 'destructive', text: 'Отмена' }
             ]
         }, (buttonId) => {
@@ -210,14 +210,14 @@ document.addEventListener('DOMContentLoaded', function() {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ userId, amount: 1, description: 'Покупка Rug Pull' })
+            body: JSON.stringify({ userId, amount: 1, description: 'Покупка функции Rug Pull' })
         })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
                     score += 100000;
                     updateScoreDisplay();
-                    showNotification('Rug Pull успешно приобретен!');
+                    showNotification('Rug Pull успешно выполнен!');
                     saveUserData();
                 } else {
                     showNotification('Ошибка при оплате: ' + data.error);
