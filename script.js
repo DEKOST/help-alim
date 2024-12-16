@@ -146,9 +146,12 @@ document.addEventListener('DOMContentLoaded', function() {
         if (score >= 10) {
             score = Math.round(score * 0.1); // Отнимаем 90% очков
             updateScoreDisplay();
-            addAchievement('reset', 'Сброс прогресса');
-            showAchievementNotification('Сброс прогресса');
+            addAchievement('reset', 'Создал новую монету!');
+            showAchievementNotification('Разблокирована ачивка: Создал новую монету!');
             achievementSound.play();
+            addRugPullClicked = false;
+            resetButton.style.display = 'none'; // Скрыть кнопку resetButton
+            resetButtonText.style.display = 'none'; // Скрыть кнопку resetButtonText
             saveUserData();
         } else {
             showNotification('Недостаточно очков для сброса прогресса!');
@@ -304,11 +307,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // Загрузить уже разблокированные ачивки
     function loadAchievements() {
         const achievements = {
-            '1000': 'Бомж. Заработать $1000',
-            '5000': 'Нищий. Заработать $5000',
-            '10000': 'Бедняк. Заработать $10000',
-            '50000': 'Рабочий класс. Заработать $50000',
-            '100000': 'Средний класс. Заработать $100000',
+            '1000': 'Бомж. Заработать $10',
+            '5000': 'Нищий. Заработать $500',
+            '10000': 'Бедняк. Заработать $1000',
+            '50000': 'Рабочий класс. Заработать $5000',
+            '100000': 'Средний класс. Заработать $10000',
             'rug_pull': '🐔 Поступок петушары. Сделать RUG PULL!',
             '2000000': 'Дурачек'
         };
@@ -325,7 +328,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Проверка счета при загрузке страницы
     function checkScoreOnLoad() {
-        if (score >= 1000) {
+        if (score >= 100000) {
             rugPullButton.style.display = 'block';
             if (hint) {
                 hint.style.display = 'none';
