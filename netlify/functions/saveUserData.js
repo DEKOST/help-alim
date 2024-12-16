@@ -1,4 +1,4 @@
-//saveUserData
+// /netlify/functions/saveUserData.js
 const { MongoClient } = require('mongodb');
 
 const username = process.env.MONGODB_USER;
