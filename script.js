@@ -207,35 +207,56 @@ document.addEventListener('DOMContentLoaded', function() {
             return Math.floor(Math.random() * 10001); // Random value between 0 and 10000
         } else {
             // 75% chance for a negative effect
-            return -Math.floor(Math.random() * 3001); // Random value between -10000 and 0
+            return -Math.floor(Math.random() * 2001); // Random value between -5000 and 0
         }
     }
 
     hookahButton.addEventListener('click', function() {
-        const effect = getRandomEffect();
-        score += effect;
-        updateScoreDisplay();
-        closeUpgradeModal();
-        showNotification(`Ты забил кальян и расслабился. ${effect >= 0 ? '+' : ''}${effect} $!`);
-        saveUserData();
+        if (score >= 10000) {
+            const effect = getRandomEffect();
+            score += effect;
+            if (score <= 0) {
+                score = 0;
+            }
+            updateScoreDisplay();
+            closeUpgradeModal();
+            showNotification(`Ты забил кальян и ${effect >= 0 ? 'расслабился' : 'расслабился так что обосрался'}. ${effect >= 0 ? '+' : ''}${effect}$!`);
+            saveUserData();
+        } else {
+            showNotification('Недостаточно денег для использования этой функции, нищеброд!');
+        }
     });
 
     amaButton.addEventListener('click', function() {
-        const effect = getRandomEffect();
-        score += effect;
-        updateScoreDisplay();
-        closeUpgradeModal();
-        showNotification(`Ты провел AMA сессию и ${effect >= 0 ? 'получил' : 'потерял'} ${effect >= 0 ? '+' : ''}${effect} $!`);
-        saveUserData();
+        if (score >= 10000) {
+            const effect = getRandomEffect();
+            score += effect;
+            if (score <= 0) {
+                score = 0;
+            }
+            updateScoreDisplay();
+            closeUpgradeModal();
+            showNotification(`Ты провел AMA сессию и ${effect >= 0 ? 'получил респект и денег' : 'потерял время и деньги'}. ${effect >= 0 ? '+' : ''}${effect}$!`);
+            saveUserData();
+        } else {
+            showNotification('Недостаточно денег для использования этой функции, нищеброд!');
+        }
     });
 
     sadButton.addEventListener('click', function() {
-        const effect = getRandomEffect();
-        score += effect;
-        updateScoreDisplay();
-        closeUpgradeModal();
-        showNotification(`Ты погрустил и ${effect >= 0 ? 'получил' : 'потерял'} мотивацию. ${effect >= 0 ? '+' : ''}${effect} $!`);
-        saveUserData();
+        if (score >= 10000) {
+            const effect = getRandomEffect();
+            score += effect;
+            if (score <= 0) {
+                score = 0;
+            }
+            updateScoreDisplay();
+            closeUpgradeModal();
+            showNotification(`Ты погрустил и ${effect >= 0 ? 'получил' : 'потерял'} мотивацию. ${effect >= 0 ? '+' : ''}${effect}$!`);
+            saveUserData();
+        } else {
+            showNotification('Недостаточно денег для использования этой функции, нищеброд!');
+        }
     });
 
     function checkScore() {
