@@ -181,6 +181,24 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     rugPullButton.addEventListener('click', function() {
+        if (!window.Telegram.WebApp.initDataUnsafe?.user) {
+            showNotification('Не удалось получить данные пользователя');
+            return;
+        }
+        // Запрос на оплату Telegram Stars
+        window.Telegram.WebApp.showPopup({
+            title: 'Покупка Rug Pull',
+            message: 'Вы хотите купить функцию Rug Pull за 50 Telegram Stars?',
+            buttons: [
+                { id: 'confirm', type: 'default', text: 'Купить за 50 ⭐' },
+                { id: 'cancel', type: 'destructive', text: 'Отмена' }
+            ]
+        }, (buttonId) => {
+            if (buttonId === 'confirm') {
+                initiatePayment();
+            }
+        });
+
         if (!addRugPullClicked) {
             score += 100000; // Увеличиваем стоимость Rug Pull до 100000
             updateScoreDisplay();
