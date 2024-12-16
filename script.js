@@ -180,12 +180,16 @@ document.addEventListener('DOMContentLoaded', function() {
         closeUpgradeModal();
     });
 
-    rugPullButton.addEventListener('click', function() {
-        if (!window.Telegram.WebApp.initDataUnsafe?.user) {
+    rugPullButton.addEventListener('click', function () {
+        const user = window.Telegram.WebApp.initDataUnsafe?.user;
+
+        if (!user || !user.id) {
             closeUpgradeModal();
             showNotification('Не удалось получить данные пользователя');
             return;
         }
+
+        const userId = user.id; // Получаем ID пользователя
 
         // Запрос на оплату Telegram Stars
         closeUpgradeModal();
@@ -198,31 +202,45 @@ document.addEventListener('DOMContentLoaded', function() {
             ]
         }, (buttonId) => {
             if (buttonId === 'confirm') {
-                initiatePayment();
+                initiatePayment(userId);
             }
         });
     });
 
 // Функция для отправки запроса на оплату
-    function initiatePayment() {
+    function initiatePayment(userId) {
         fetch('/.netlify/functions/initiatePayment', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json'
+            },
             body: JSON.stringify({
-                userId: telegramUserId,
-                amount: purchaseAmount,
-                description: purchaseDesc
+                userId,
+                amount: 1,
+                description: 'Покупка функции Rug Pull'
             })
         })
-            .then(response => response.json())
+            .then(response => {
+                console.log('Server Response:', response);
+                return response.json();
+            })
             .then(data => {
-                console.log('Server Response:', data);
-                if (!data.success) {
-                    console.error('Error:', data.error);
+                if (data.success) {
+                    score += 100000;
+                    updateScoreDisplay();
+                    showNotification('Rug Pull успешно выполнен!');
+                    saveUserData();
+                } else {
+                    console.error('Payment Error:', data.error);
+                    showNotification('Ошибка при оплате: ' + data.error);
                 }
             })
-            .catch(error => console.error('Fetch Error:', error));
+            .catch(error => {
+                console.error('Error initiating payment:', error);
+                showNotification('Ошибка при выполнении платежа');
+            });
     }
+
 
     function getRandomEffect() {
         const randomValue = Math.random();
