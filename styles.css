@@ -18,11 +18,14 @@ body {
 
 .fdescription {
     font-family: "GreenHillSans-Regular", sans-serif;
-    font-size: 0.7em;
+    font-size: 0.5em;
 }
 
 h2 {
     font-family: "GreenHillSans-Regular", sans-serif;
+    font-size: 1.5em;
+    margin-top: 0.2em;
+    margin-bottom: 0.5em;
 }
 
 .footer {
