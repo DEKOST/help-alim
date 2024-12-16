@@ -207,7 +207,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return Math.floor(Math.random() * 10001); // Random value between 0 and 10000
         } else {
             // 75% chance for a negative effect
-            return -Math.floor(Math.random() * 10001); // Random value between -10000 and 0
+            return -Math.floor(Math.random() * 5001); // Random value between -10000 and 0
         }
     }
 
