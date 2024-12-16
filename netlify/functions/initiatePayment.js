@@ -16,7 +16,7 @@ exports.handler = async (event) => {
                 payload: 'rug_pull_purchase',
                 provider_token: paymentToken,
                 currency: 'XTR',
-                prices: [{ label: 'Rug Pull', amount: amount * 100 }]
+                prices: [{ label: 'Rug Pull', amount: amount }]
             })
         });
 
