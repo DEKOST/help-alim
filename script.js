@@ -104,6 +104,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function updateUpgradeButton() {
         upgradeClickButton.textContent = `Больше 💵 за клик ($${clickUpgradeCost})`;
+        hookahButton.textContent = `💩 Забить кальян ($${clickUpgradeCost})`;
+        amaButton.textContent = `🤡 Провести AMA сессию ($${clickUpgradeCost})`;
+        sadButton.textContent = `☹️ Погрустить ($${clickUpgradeCost})`;
     }
 
     function closeUpgradeModal() {
@@ -337,6 +340,9 @@ document.addEventListener('DOMContentLoaded', function() {
             if (hint) {
                 hint.style.display = 'none';
             }
+        }
+        else {
+            rugPullButton.style.display = 'none';
         }
 
         if (score >= 200000) {
