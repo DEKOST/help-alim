@@ -195,11 +195,14 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     function checkScore() {
-        if (score >= 1000) { // Увеличиваем порог для появления кнопки Rug Pull
+        if (score >= 100000) { // Увеличиваем порог для появления кнопки Rug Pull
             rugPullButton.style.display = 'block';
             if (hint) {
                 hint.style.display = 'none';
             }
+        }
+        else {
+            rugPullButton.style.display = 'none';
         }
 
         if (score >= 200000) { // Увеличиваем порог для изменения изображения
