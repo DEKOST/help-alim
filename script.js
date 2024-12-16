@@ -190,10 +190,10 @@ document.addEventListener('DOMContentLoaded', function() {
         // Запрос на оплату Telegram Stars
         closeUpgradeModal();
         window.Telegram.WebApp.showPopup({
-            title: 'Покупка Rug Pull',
+            title: 'Покупка функции Rug Pull',
             message: 'Вы хотите купить функцию Rug Pull за 50 Telegram Stars?',
             buttons: [
-                { id: 'confirm', type: 'default', text: 'Сделать RUG PULL за 50 ⭐' },
+                { id: 'confirm', type: 'default', text: 'Сделать RUG PULL за 1 ⭐' },
                 { id: 'cancel', type: 'destructive', text: 'Отмена' }
             ]
         }, (buttonId) => {
@@ -207,26 +207,21 @@ document.addEventListener('DOMContentLoaded', function() {
     function initiatePayment() {
         fetch('/.netlify/functions/initiatePayment', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ userId, amount: 1, description: 'Покупка функции Rug Pull' })
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                userId: telegramUserId,
+                amount: purchaseAmount,
+                description: purchaseDesc
+            })
         })
             .then(response => response.json())
             .then(data => {
-                if (data.success) {
-                    score += 100000;
-                    updateScoreDisplay();
-                    showNotification('Rug Pull успешно выполнен!');
-                    saveUserData();
-                } else {
-                    showNotification('Ошибка при оплате: ' + data.error);
+                console.log('Server Response:', data);
+                if (!data.success) {
+                    console.error('Error:', data.error);
                 }
             })
-            .catch(error => {
-                console.error('Error initiating payment:', error);
-                showNotification('Ошибка при выполнении платежа');
-            });
+            .catch(error => console.error('Fetch Error:', error));
     }
 
     function getRandomEffect() {
