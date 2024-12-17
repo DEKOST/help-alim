@@ -214,6 +214,7 @@ document.addEventListener('DOMContentLoaded', function() {
             request: 'payment',
             amount: 1,
             payload: 'rug_pull_purchase',
+            currency: 'tgStar',
             scope: 'stars'
         })
             .then(result => {
