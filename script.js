@@ -180,67 +180,56 @@ document.addEventListener('DOMContentLoaded', function() {
         closeUpgradeModal();
     });
 
-    rugPullButton.addEventListener('click', function () {
-        const user = window.Telegram.WebApp.initDataUnsafe?.user;
-
-        if (!user || !user.id) {
+    rugPullButton.addEventListener('click', function() {
+        if (!window.Telegram.WebApp.initDataUnsafe?.user) {
             closeUpgradeModal();
             showNotification('Не удалось получить данные пользователя');
             return;
         }
 
-        const userId = user.id; // Получаем ID пользователя
-
-        // Запрос на оплату Telegram Stars
         closeUpgradeModal();
         window.Telegram.WebApp.showPopup({
             title: 'Покупка функции Rug Pull',
-            message: 'Вы хотите купить функцию Rug Pull за 50 Telegram Stars?',
+            message: 'Вы хотите купить функцию Rug Pull за 1 Telegram Star?',
             buttons: [
-                { id: 'confirm', type: 'default', text: 'Сделать RUG PULL за 1 ⭐' },
+                { id: 'confirm', type: 'default', text: 'Купить за 1 ⭐' },
                 { id: 'cancel', type: 'destructive', text: 'Отмена' }
             ]
         }, (buttonId) => {
             if (buttonId === 'confirm') {
-                initiatePayment(userId);
+                initiatePayment();
             }
         });
     });
 
-// Функция для отправки запроса на оплату
-    function initiatePayment(userId) {
-        fetch('/.netlify/functions/initiatePayment', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                userId,
-                amount: 1,
-                description: 'Покупка функции Rug Pull'
-            })
+    function initiatePayment() {
+        const tg = window.Telegram.WebApp;
+
+        if (!tg.requestWriteAccess) {
+            showNotification('Ваш клиент Telegram не поддерживает оплату Stars');
+            return;
+        }
+
+        tg.requestWriteAccess({
+            request: 'payment',
+            amount: 1,
+            payload: 'rug_pull_purchase'
         })
-            .then(response => {
-                console.log('Server Response:', response);
-                return response.json();
-            })
-            .then(data => {
-                if (data.success) {
+            .then(result => {
+                if (result.status === 'success') {
                     score += 100000;
                     updateScoreDisplay();
                     showNotification('Rug Pull успешно выполнен!');
                     saveUserData();
                 } else {
-                    console.error('Payment Error:', data.error);
-                    showNotification('Ошибка при оплате: ' + data.error);
+                    showNotification('Оплата отменена или не удалась.');
                 }
             })
             .catch(error => {
-                console.error('Error initiating payment:', error);
+                console.error('Payment error:', error);
                 showNotification('Ошибка при выполнении платежа');
             });
     }
-
 
     function getRandomEffect() {
         const randomValue = Math.random();
