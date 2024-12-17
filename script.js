@@ -213,7 +213,8 @@ document.addEventListener('DOMContentLoaded', function() {
         tg.requestWriteAccess({
             request: 'payment',
             amount: 1,
-            payload: 'rug_pull_purchase'
+            payload: 'rug_pull_purchase',
+            scope: 'stars'
         })
             .then(result => {
                 if (result.status === 'success') {
